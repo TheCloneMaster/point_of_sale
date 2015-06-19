@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+  <data>
+    <record id="view_pos_session_form_remove_field" model="ir.ui.view">
+      <field name="name">view.pos.session.form.remove.field</field>
+      <field name="model">pos.session</field>
+      <field name="type">form</field>
+      <field eval="7" name="priority"/>
+      <field name="inherit_id" ref="point_of_sale.view_pos_session_form"/>
+      <field name="arch" type="xml">
+        <field groups="base.group_extended" name="ean13"  position="attributes">
+            <attribute name="groups">point_of_sale.group_pos_manager</attribute>
+        </field>
+      </field>
+    </record>
+  </data>
+</openerp>

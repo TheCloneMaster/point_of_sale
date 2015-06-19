@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<!-- 
+		=========================================================== 
+		ACCOUNT INVOICE 
+		===========================================================
+		-->
+		
+		<report
+		    auto="False"
+		    id="pos_invoice2"
+		    model="account.invoice"
+		    name="pos.invoice2"
+		    rml="pos_invoice/report/pos_invoice.rml"
+		    string="POS invoice"
+		    attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
+		    usage="default"
+		    multi="True"/>
+		
+		<record model="ir.ui.view" id="account_invoice_form_pos_invoice">
+			<field name="name">account.invoice.form.pos.invoice</field>
+			<field name="model">account.invoice</field>
+			<field name="type">form</field>
+			<field name="priority" eval="5"/>
+			<field name="inherit_id" ref="account.invoice_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//button[@string='Print Invoice']" position="after">
+                                    <button name="%(pos_invoice2)d" string="Imprimir Factura" type="action" icon="gtk-print" states="open,paid,proforma,sale,proforma2"/>
+				</xpath>
+			</field>
+		</record>
+		
+		<!--record model="ir.ui.view" id="account_invoice_search_inh">
+			<field name="name">account.invoice.search.inh</field>
+			<field name="model">account.invoice</field>
+			<field name="type">search</field>
+			<field name="inherit_id" ref="account.view_account_invoice_filter" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='number']" position="before">
+					<field name="date_invoice" />
+				</xpath>
+			</field>
+		</record-->
+		
+	</data>
+</openerp>

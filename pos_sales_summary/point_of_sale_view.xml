@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+  <data>
+    <record id="view_pos_session_form_dual_currency_fields" model="ir.ui.view">
+        <field name="name">view.pos.session.form.dual.currency.fields</field>
+        <field name="model">pos.session</field>
+        <field name="type">form</field>
+        <field eval="7" name="priority"/>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_form"/>
+        <field name="arch" type="xml">
+            <button name="print_closing" position="after">
+                <button name="register_deposit" type="object" string="Registrar Depósitos" states="closed" class="oe_highlight" />
+            </button>
+            <group string="Opening Cash Control" position="replace"/>
+            <group string="Closing Cash Control" position="replace"/>
+            <label string="+ Transactions" position="replace"/>
+            <label string="= Theoretical Closing Balance" position="replace"/>
+            <field name="cash_register_difference" position="replace"/>
+            <field name="cash_register_total_entry_encoding" position="replace"/>
+            <field name="cash_register_balance_end_real" position="replace">
+                <field name="crc_cash_register_balance_end" string="Efectivo CRC" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="crc_cash_register_balance_end_real" string="Depósito" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="crc_cash_register_difference" string="Diferencia" class="oe_subtotal_footer_separator oe_right oe_pos_total oe_pos_difference" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="crc_journal_id"/>
+                <field name="crc_deposit_reference"/>
+            </field>
+            <field name="cash_register_balance_start" position="replace"/>
+            <field name="cash_register_balance_end" position="replace">
+                <field name="cash_register_balance_end" string="Efectivo USD" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="usd_cash_register_balance_end_real" string="Depósito" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="cash_register_difference" string="Diferencia" class="oe_subtotal_footer_separator oe_right oe_pos_total oe_pos_difference" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                <field name="usd_journal_id"/>
+                <field name="usd_deposit_reference"/>
+            </field>
+            <field name="cash_register_credit_card_end_real" position="replace"/>
+
+
+
+      </field>
+    </record>
+  </data>
+</openerp>
