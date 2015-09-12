@@ -7,15 +7,14 @@
             <field name="arch" type="xml">
                 <graph string="Point of Sale Analysis" type="pivot">
                     <field name="location_id" type="row"/>
-                    <field name="product_categ_id" type="col"/>
+                    <field name="date" interval="month" type="col"/>
+                    <!--field name="product_categ_id" type="col"/-->
                     <field name="price_total" type="measure"/>
                     <field name="product_qty" type="measure"/>
                     <field name="average_price" type="measure"/>
                 </graph>
             </field>
         </record>
-<!-- interval="month"  -->
-
 
         <record id="view_report_pos_order_search" model="ir.ui.view">
             <field name="name">report.pos.order.search</field>
@@ -29,8 +28,6 @@
                     <filter string="Year" name="year" domain="[('date','&lt;=', time.strftime('%%Y-%%m-%%d')),('date','&gt;=',time.strftime('%%Y-01-01'))]" help="POS ordered created during current year"/>
                     <separator/>
                     <filter string="My Sales" help="My Sales" domain="[('user_id','=',uid)]"/>
-                    <field name="partner_id"/>
-                    <field name="user_id"/>
                     <field name="partner_id"/>
                     <field name="user_id"/>
                     <group expand="1" string="Group By">

@@ -58,11 +58,11 @@ class pos_session(osv.osv):
         move_pool = self.pool.get('account.move')
         move_line_proxy = self.pool.get('account.move.line')
         period_pool = self.pool.get('account.period')
+        search_periods = period_pool.find(cr, uid, receiptDate, context=context)
+        period_id = search_periods[0]
 
         for record in self.browse(cr, uid, ids, context=context):
             receiptDate = record.stop_at, #fields.date.context_today(self, cr, uid, context=context)
-            search_periods = period_pool.find(cr, uid, receiptDate, context=context)
-            period_id = search_periods[0]
             if record.crc_cash_register_balance_end_real:
                 line_ids = []
                 name = _('Salida x Deposito ') + record.crc_deposit_reference+ ' - ' +record.crc_journal_id.name

@@ -811,6 +811,7 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
                 tax:                this.get_tax(),
                 product_description:      this.get_product().description,
                 product_description_sale: this.get_product().description_sale,
+                category_name: this.pos.db.category_by_id[this.get_product().pos_categ_id[0]].parent_id[1],
             };
         },
         // changes the base price of the product for this orderline
@@ -985,7 +986,7 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
                 creationDate:   new Date(),
                 orderLines:     new module.OrderlineCollection(),
                 paymentLines:   new module.PaymentlineCollection(),
-                name:           _t("Factura ") + this.uid,
+                name:           this.uid, //_t("Factura ") + this.uid,
                 client:         null,
             });
             this.selected_orderline   = undefined;
@@ -1065,9 +1066,9 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
         addPaymentline: function(cashregister) {
             var paymentLines = this.get('paymentLines');
             var newPaymentline = new module.Paymentline({},{cashregister:cashregister, pos:this.pos});
-            if(cashregister.journal.type !== 'cash'){
-                newPaymentline.set_amount( Math.max(this.getDueLeft(),0) );
-            }
+            //if(cashregister.journal.type !== 'cash'){
+            newPaymentline.set_amount( Math.max(this.getDueLeft(),0) );
+            //}
             paymentLines.add(newPaymentline);
             this.selectPaymentline(newPaymentline);
 

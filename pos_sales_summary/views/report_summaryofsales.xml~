@@ -143,6 +143,8 @@
                         </tr>
                     </tbody>
                 </table>
+
+
                 <h3 t-if="data['form']['show_details']">Pagos Crédito</h3>
                 <table t-if="data['form']['show_details']" class="table table-condensed">
                     <thead>

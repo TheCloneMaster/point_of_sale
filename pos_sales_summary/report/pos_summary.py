@@ -50,14 +50,14 @@ class pos_summary(report_sxw.rml_parse):
                                                      ('company_id','=',company_id)])
         for pos in pos_obj.browse(self.cr, self.uid, pos_ids):
             if pos.state in ['paid', 'done']:
-                subtotal = pos.amount_subtotal,
-                tax = pos.amount_tax,
-                total = pos.amount_total,
+                subtotal = pos.amount_subtotal
+                tax = pos.amount_tax
+                total = pos.amount_total
             else:
                 subtotal = tax = total = 0
 
             result = {
-                'pos_name': pos.name,
+                'pos_name': pos.name + (pos.invoice_id and "-"+pos.invoice_id.number or ""),
                 'date_order': pos.date_order,
                 'subtotal': subtotal,
                 'tax': tax,
@@ -91,12 +91,16 @@ class pos_summary(report_sxw.rml_parse):
                                                      ('company_id','=',company_id)])
 
         for invoice in invoice_obj.browse(self.cr, self.uid, invoice_ids):
-            if invoice.state in ['paid', 'done']:
-                subtotal = invoice.amount_untaxed,
-                tax = invoice.amount_tax,
-                total = invoice.amount_total,
+            if invoice.state in ['paid', 'done', 'open']:
+                subtotal = invoice.amount_untaxed
+                tax = invoice.amount_tax
+                total = invoice.amount_total
+                residual = invoice.residual
+                self.invoice_subtotal += invoice.amount_untaxed
+                self.invoice_total += invoice.amount_total
+                self.residual += residual
             else:
-                subtotal = tax = total = 0
+                subtotal = tax = total = residual = 0
 
             result = {
                 'pos_name': invoice.number,
@@ -104,14 +108,46 @@ class pos_summary(report_sxw.rml_parse):
                 'subtotal': subtotal,
                 'tax': tax,
                 'total': total,
+                'residual': residual,
                 'state': invoice.state
             }
             data.append(result)
-            if invoice.state in ['done','paid']:
-                #self.base += (pol.price_unit * pol.qty)
-                self.invoice_subtotal += invoice.amount_untaxed
-                self.invoice_total += invoice.amount_total
-                #self.qty += pol.qty
+        if data:
+            return data
+        else:
+            return {}
+
+    def _credit_payment_details(self, form):
+        voucher_obj = self.pool.get('account.voucher')
+        user_obj = self.pool.get('res.users')
+        data = []
+        result = {}
+        #user_ids = form['user_ids'] or self._get_all_users()
+        location_ids = form['location_ids'] or self._get_all_locations()
+
+        company_id = user_obj.browse(self.cr, self.uid, self.uid).company_id.id
+        voucher_ids = voucher_obj.search(self.cr, self.uid, [('date','>=',form['date_start2']),
+                                                     ('date','<=',form['date_end2']),
+                                                     #('location_id','in',location_ids),
+                                                     ('type','=','receipt'),
+                                                     ('state', '=', 'posted'),
+                                                     ('company_id','=',company_id)])
+
+        for voucher in voucher_obj.browse(self.cr, self.uid, voucher_ids):
+            voucher_amount = voucher.amount
+            debits = sum(x.amount for x in voucher.line_dr_ids)
+            credits = sum(x.amount for x in voucher.line_cr_ids)
+
+            result = {
+                'name': voucher.number,
+                'journal': voucher.journal_id.name,
+                'date': voucher.date,
+                'amount': voucher_amount,
+                'debits': debits,
+                'credits': credits,
+                'total': voucher_amount-debits+credits,
+            }
+            data.append(result)
         if data:
             return data
         else:
@@ -268,6 +304,7 @@ class pos_summary(report_sxw.rml_parse):
         self.base = 0.0
         self.subtotal = 0.0
         self.total = 0.0
+        self.residual = 0.0
         self.invoice_base = 0.0
         self.invoice_subtotal = 0.0
         self.invoice_total = 0.0
@@ -285,6 +322,7 @@ class pos_summary(report_sxw.rml_parse):
             'gettaxamount2': self._get_tax_amount2,
             'pos_sales_details':self._pos_sales_details,
             'credit_sales_details':self._credit_sales_details,
+            'credit_payment_details':self._credit_payment_details,
             'pos_sales_summary':self._pos_sales_summary,
             'getqtytotal2': self._get_qty_total_2,
             'getsalessubtotal2': self._get_sales_subtotal_2,

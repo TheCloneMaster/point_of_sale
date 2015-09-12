@@ -87,7 +87,42 @@
                         </tbody>
                     </table>
 
-                    <t t-foreach="o.statement_ids" t-as="statement">
+                    <h4 t-if="statement.opening_details_ids">Opening Details:</h4>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Money Unit</th>
+                                <th>Number Units</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="statement.opening_details_ids" t-as="line">
+                                <td><span t-field="line.pieces"/></td>
+                                <td><span t-field="line.number_opening"/></td>
+                                <td><span t-field="line.subtotal_opening"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4 t-if="statement.details_ids">Opening Details:</h4>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Money Unit</th>
+                                <th>Number Units</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="statement.details_ids" t-as="line">
+                                <td><span t-field="line.pieces"/></td>
+                                <td><span t-field="line.number_closing"/></td>
+                                <td><span t-field="line.subtotal_closing"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!--t t-foreach="o.statement_ids" t-as="statement">
                         <h4 t-if="statement.line_ids">Statement Details: <span t-esc="statement.name"/></h4>
 
                         <table class="table table-condensed" t-if="statement.line_ids">
@@ -116,7 +151,7 @@
                             </tbody>
                         </table>
                     </t>
-                </div>
+                </div-->
             </t>
         </t>
     </t>

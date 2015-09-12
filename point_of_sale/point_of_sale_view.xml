@@ -981,7 +981,7 @@
             action="action_pos_session"
             id="menu_pos_session_all"
             sequence="1"
-            groups="group_pos_manager"/>
+            groups="group_pos_user"/>
 
         <record id="view_pos_order_filter" model="ir.ui.view">
             <field name="name">pos.order.list.select</field>
