@@ -87,7 +87,7 @@
                         </tbody>
                     </table>
 
-                    <h4 t-if="statement.opening_details_ids">Opening Details:</h4>
+                    <h4 t-if="o.opening_details_ids">Opening Details:</h4>
                     <table class="table table-condensed">
                         <thead>
                             <tr>
@@ -97,14 +97,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr t-foreach="statement.opening_details_ids" t-as="line">
+                            <tr t-foreach="o.opening_details_ids" t-as="line">
                                 <td><span t-field="line.pieces"/></td>
                                 <td><span t-field="line.number_opening"/></td>
                                 <td><span t-field="line.subtotal_opening"/></td>
                             </tr>
                         </tbody>
                     </table>
-                    <h4 t-if="statement.details_ids">Opening Details:</h4>
+                    <h4 t-if="o.details_ids">Opening Details:</h4>
                     <table class="table table-condensed">
                         <thead>
                             <tr>
@@ -114,7 +114,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr t-foreach="statement.details_ids" t-as="line">
+                            <tr t-foreach="o.details_ids" t-as="line">
                                 <td><span t-field="line.pieces"/></td>
                                 <td><span t-field="line.number_closing"/></td>
                                 <td><span t-field="line.subtotal_closing"/></td>
