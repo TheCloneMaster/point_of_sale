@@ -86,40 +86,47 @@
                             </tr>
                         </tbody>
                     </table>
-
-                    <h4 t-if="o.opening_details_ids">Opening Details:</h4>
                     <table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <th>Money Unit</th>
-                                <th>Number Units</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr t-foreach="o.opening_details_ids" t-as="line">
-                                <td><span t-field="line.pieces"/></td>
-                                <td><span t-field="line.number_opening"/></td>
-                                <td><span t-field="line.subtotal_opening"/></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <h4 t-if="o.details_ids">Opening Details:</h4>
-                    <table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <th>Money Unit</th>
-                                <th>Number Units</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr t-foreach="o.details_ids" t-as="line">
-                                <td><span t-field="line.pieces"/></td>
-                                <td><span t-field="line.number_closing"/></td>
-                                <td><span t-field="line.subtotal_closing"/></td>
-                            </tr>
-                        </tbody>
+                        <tr>
+                            <td>
+                                <h4 t-if="o.opening_details_ids">Opening Details:</h4>
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Money Unit</th>
+                                            <th>Number Units</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="o.opening_details_ids" t-as="line">
+                                            <td><span t-field="line.pieces"/></td>
+                                            <td><span t-field="line.number_opening"/></td>
+                                            <td><span t-field="line.subtotal_opening"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td>
+                                <h4 t-if="o.details_ids">Opening Details:</h4>
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Money Unit</th>
+                                            <th>Number Units</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="o.details_ids" t-as="line">
+                                            <td><span t-field="line.pieces"/></td>
+                                            <td><span t-field="line.number_closing"/></td>
+                                            <td><span t-field="line.subtotal_closing"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
                     </table>
 
                     <!--t t-foreach="o.statement_ids" t-as="statement">
