@@ -54,7 +54,6 @@ Main Features
         'security/ir.model.access.csv',
         'wizard/pos_summary.xml',
         'point_of_sale_report.xml',
-        'point_of_sale_view.xml',
         'report/so_pos_order_report_view.xml',
         'views/report_summaryofsales.xml',
     ],
