@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<openerp>
+    <data>
+
+        <report
+            id="pos_lines_summary"
+            string="summary of Sales"
+            model="pos.order"
+            report_type="qweb-pdf"
+            name="pos_sales_summary.report_summaryofsales"
+            file="pos_sales_summary.report_summaryofsales"
+            menu="False"
+         />
+
+        <menuitem icon="STOCK_PRINT" action="action_report_pos_summary"
+                id="menu_pos_summary" parent="point_of_sale.menu_point_rep" sequence="6" />
+
+        <record id="view_report_pos_order_search_extra" model="ir.ui.view">
+            <field name="name">report.pos.order.search.extra</field>
+            <field name="model">report.pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_report_pos_order_search"/>
+            <field name="arch" type="xml">
+                <filter string="Year" position="replace">
+                    <filter string="Year" name="year" domain="[('date','&lt;=', context_today().strftime('%%Y-%%m-%%d')),('date','&gt;=',context_today().strftime('%%Y-01-01'))]" help="POS orders created during current year"/>
+                    <filter icon="terp-go-today" string="Previous Month" domain="[('date','&lt;=',(context_today().replace(day=1)+relativedelta(days=-1)).strftime('%%Y-%%m-%%d')),('date','&gt;=',(context_today().replace(day=1)+relativedelta(months=-1)).strftime('%%Y-%%m-01'))]" help="POS Orders processed this month"/>
+                    <filter icon="terp-go-today" string="This Month" domain="[('date','&lt;=',context_today().strftime('%%Y-%%m-%%d')),('date','&gt;=',context_today().strftime('%%Y-%%m-01'))]" help="POS Orders processed this month"/>
+                    <filter icon="terp-go-today" string="Yesterday" domain="[('date','&lt;=',(context_today()+relativedelta(days=-1)).strftime('%Y-%m-%d')),('date','&gt;=',(context_today()+relativedelta(days=-1)).strftime('%%Y-%%m-%%d'))]" help="POS Orders processed Yesterday"/>
+                    <filter icon="terp-go-today" string="Today" domain="[('date','&lt;=',context_today().strftime('%%Y-%%m-%%d')),('date','&gt;=',context_today().strftime('%%Y-%%m-%%d'))]" help="POS Orders processed Today"/>
+                    <filter string="Hotelero" domain="[('partner_id.','&lt;=',context_today().strftime('%%Y-%%m-%%d')),('date','&gt;=',context_today().strftime('%%Y-%%m-%%d'))]" help="POS Orders processed Today"/>
+                </filter>
+                <filter string="Order Month" position="after">
+                    <filter string="Order Day" context="{'group_by':'date:day'}" help="Day of order date"/>
+                </filter>
+            </field>
+        </record>
+
+        <record id="view_pos_order_filter_extra" model="ir.ui.view">
+            <field name="name">pos.order.list.select.extra</field>
+            <field name="model">pos.order</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_order_filter"/>
+            <field name="arch" type="xml">
+                <filter string="Posted" position="after">
+                    <filter icon="terp-go-today" string="Previous Month" domain="[('date_order','&lt;=',(context_today().replace(day=1)+relativedelta(days=-1)).strftime('%%Y-%%m-%%d')),('date_order','&gt;=',(context_today().replace(day=1)+relativedelta(months=-1)).strftime('%%Y-%%m-01'))]" help="POS Orders processed this month"/>
+                    <filter icon="terp-go-today" string="This Month" domain="[('date_order','&lt;=',context_today().strftime('%%Y-%%m-%%d')),('date_order','&gt;=',context_today().strftime('%%Y-%%m-01'))]" help="POS Orders processed this month"/>
+                    <filter icon="terp-go-today" string="Yesterday" domain="[('date_order','&lt;=',(context_today()+relativedelta(days=-1)).strftime('%Y-%m-%d')),('date_order','&gt;=',(context_today()+relativedelta(days=-1)).strftime('%%Y-%%m-%%d'))]" help="POS Orders processed Yesterday"/>
+                    <filter icon="terp-go-today" string="Today" domain="[('date_order','&lt;=',context_today().strftime('%%Y-%%m-%%d')),('date_order','&gt;=',context_today().strftime('%%Y-%%m-%%d'))]" help="POS Orders processed Today"/>
+                </filter>
+                <filter string="Order Month" position="after">
+                    <filter string="Order Day" context="{'group_by':'date_order:day'}" help="Day of order date"/>
+                </filter>
+            </field>
+        </record>
+
+        <menuitem action="product.product_normal_action_sell"
+                id="menu_product_variant" parent="stock.menu_stock_product" sequence="5" />
+
+
+    </data>
+</openerp>
+

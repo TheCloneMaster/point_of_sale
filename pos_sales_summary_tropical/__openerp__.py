@@ -55,6 +55,7 @@ Main Features
         'wizard/pos_summary.xml',
         'point_of_sale_report.xml',
         'point_of_sale_view.xml',
+        'product_view.xml',
         'report/so_pos_order_report_view.xml',
         'views/report_summaryofsales.xml',
     ],
