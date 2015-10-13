@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<t t-name="account.report_financial">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+                <div class="header">
+                  <div class="text-center"><br/>
+                    <strong t-esc="o.company_id.name"/><br/>
+                    <strong> <span t-esc="data['form']['account_report_id'][1]"/> </strong><br/>
+                    <strong> DEL <span t-esc="formatLang(get_start_date(data), date=True)"/></strong>
+                    <strong> AL <span t-esc="formatLang(get_end_date(data), date=True)"/></strong><br/>
+                       <span t-if="o.company_id.currency_id.symbol=='$'">(EXPRESADO EN DOLARES)</span><br/>
+                       <span t-if="o.company_id.currency_id.symbol=='¢'">(EXPRESADO EN COLONES)</span><br/>
+                 </div>
+
+                </div>
+                <div class="page">
+                    <table class="table table-condensed" t-if="data['form']['debit_credit'] == 1">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th class="text-right">Debit</th>
+                                <th class="text-right">Credit</th>
+                                <th class="text-right">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="get_lines(data)" t-as="a">
+                                <t t-if="a['level'] != 0">
+                                    <t t-if="a.get('level') &gt; 3"><t t-set="style" t-value="'font-weight: normal;'"/></t>
+                                    <t t-if="not a.get('level') &gt; 3"><t t-set="style" t-value="'font-weight: bold;'"/></t>
+
+                                    <td>
+                                        <span style="color: white;" t-esc="'..' * a.get('level', 0)"/>
+                                        <span t-att-style="style" t-esc="a.get('name')"/>
+                                    </td>
+                                    <td class="text-right" style="white-space: nowrap;">
+                                        <span t-att-style="style" t-esc="formatLang(a.get('debit'), currency_obj=res_company.currency_id)"/>
+                                    </td>
+                                    <td class="text-right" style="white-space: nowrap;">
+                                        <span t-att-style="style" t-esc="formatLang(a.get('credit'), currency_obj=res_company.currency_id)"/>
+                                    </td>
+                                    <td class="text-right" style="white-space: nowrap;">
+                                        <span t-att-style="style" t-esc="formatLang(a.get('balance'), currency_obj=res_company.currency_id)"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-condensed" t-if="not data['form']['enable_filter'] and not data['form']['debit_credit']">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th class="text-right">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="get_lines(data)" t-as="a">
+                                <t t-if="a['level'] != 0">
+                                    <t t-if="a.get('level') &gt; 3"><t t-set="style" t-value="'font-weight: normal;'"/></t>
+                                    <t t-if="not a.get('level') &gt; 3"><t t-set="style" t-value="'font-weight: bold;'"/></t>
+
+                                    <td>
+                                        <span style="color: white;" t-esc="'..' * a.get('level', 0)"/>
+                                        <span t-att-style="style" t-esc="a.get('name')"/>
+                                    </td>
+                                    <td class="text-right"><span t-att-style="style" t-esc="formatLang(a.get('balance'), currency_obj=res_company.currency_id)"/></td>
+                                </t>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-condensed" t-if="data['form']['enable_filter'] == 1 and not data['form']['debit_credit']">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th class="text-right">Balance</th>
+                                <th class="text-right"><span t-esc="data['form']['label_filter']"/></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="get_lines(data)" t-as="a">
+                                <t t-if="a['level'] != 0">
+                                    <t t-if="a.get('level') &gt; 3"><t t-set="style" t-value="'font-weight: normal;'"/></t>
+                                    <t t-if="not a.get('level') &gt; 3"><t t-set="style" t-value="'font-weight: bold;'"/></t>
+
+                                    <td>
+                                        <span style="color: white;" t-esc="'..' * a.get('level', 0)"/>
+                                        <span t-att-style="style" t-esc="a.get('name')"/>
+                                    </td>
+                                    <td class="text-right"><span t-att-style="style" t-esc="formatLang(a.get('balance'), currency_obj=res_company.currency_id)"/></td>
+                                    <td class="text-right"><span t-att-style="style" t-esc="formatLang(a.get('balance_cmp'), currency_obj=res_company.currency_id)"/></td>
+                                </t>
+                            </tr>
+                        </tbody>
+                    </table>
+                  <div class="text-center"><br/><br/><br/>
+                   <div class="row">
+                    <div class="col-xs-6">______________________________</div>
+                    <div class="col-xs-6">______________________________</div>
+                   </div>
+                   <div class="row">
+                    <div class="col-xs-6">BERNAL UMAÑA ALFARO</div>
+                    <div class="col-xs-6">BRENDA KLEYSEN VANDERSTELT</div>
+                   </div>
+                   <div class="row">
+                    <div class="col-xs-6">CONTADOR</div>
+                    <div class="col-xs-6">REPRESENTANTE LEGAL</div>
+                   </div>
+                 </div>
+                </div>
+        </t>
+    </t>
+</t>
+

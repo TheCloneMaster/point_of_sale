@@ -82,7 +82,7 @@ class pos_session_opening(osv.osv_memory):
             return {'value' : result}
         proxy = self.pool.get('pos.session')
         session_ids = proxy.search(cr, uid, [
-            ('state', '!=', 'closed'),
+            ('state', 'not in', ('closed','pre_closed') ),
             ('config_id', '=', config_id),
             ('user_id', '=', uid),
         ], context=context)
@@ -98,7 +98,7 @@ class pos_session_opening(osv.osv_memory):
 
     def default_get(self, cr, uid, fieldnames, context=None):
         so = self.pool.get('pos.session')
-        session_ids = so.search(cr, uid, [('state','<>','closed'), ('user_id','=',uid)], context=context)
+        session_ids = so.search(cr, uid, [('state','not in',('closed','pre_closed')), ('user_id','=',uid)], context=context)
         if session_ids:
             result = so.browse(cr, uid, session_ids[0], context=context).config_id.id
         else:

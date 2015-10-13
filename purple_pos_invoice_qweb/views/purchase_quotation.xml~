@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<t t-name="purchase.report_purchasequotation_document">
+  <div class="header">
+    <div class="row mt32 mb32">
+        <div class="col-xs-6 text-center">
+          <img src="/website/image/ir.attachment/471_4fc9460/datas" style="max-height: 100px;"/>
+        </div>
+        <div class="col-xs-6 text-center">
+          <span t-field="o.company_id.name"/>
+          <br/>
+          <span t-field="o.company_id.street"/>
+          <br/>
+          <span t-field="o.company_id.street2"/>
+          <br/>
+          <span t-field="o.company_id.city"/>
+          <span t-field="o.company_id.country_id.name"/>
+          <br/>
+          <span t-field="o.company_id.phone"/>
+        </div>
+     </div>
+  </div>
+        <div class="page">
+            <div class="oe_structure"/>
+
+            <div class="row mt32 mb32">
+               <div class="col-xs-6">
+                    Shipping Address :<br/>
+                            Purple Bay S.A. / CAMCA<br/>
+                            <span t-field="o.picking_type_id.warehouse_id.partner_id.street"/><br/>
+                            <span t-field="o.picking_type_id.warehouse_id.partner_id.city"/>, Florida<br/>
+                            <span t-field="o.picking_type_id.warehouse_id.partner_id.phone"/>
+                            <br/>
+                </div>
+                <div class="col-xs-5 col-xs-offset-1">
+                    Provider :<br/>
+                    <div t-field="o.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: true}"/>
+                </div>
+            </div>
+
+            <h2>Request for Quotation <span t-field="o.name"/></h2>
+
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th><strong>Description</strong></th>
+                        <th class="text-center"><strong>Expected Date</strong></th>
+                        <th class="text-right"><strong>Qty</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="o.order_line" t-as="order_line">
+                        <td>
+                            <span t-field="order_line.name"/>
+                        </td>
+                        <td class="text-center">
+                            <span t-field="order_line.date_planned"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="order_line.product_qty"/>
+                            <span t-field="order_line.product_uom" groups="product.group_uom"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p t-field="o.notes"/>
+            <span>Regards,</span>
+            <span t-field="user.signature"/>
+
+            <div class="oe_structure"/>
+        </div>
+    <div class="footer">
+        <div class="text-center" style="border-top: 1px solid black;">
+            <ul class="list-inline">
+              <li> <span t-field="o.company_id.name"/> </li>
+               <li>&amp;bull;</li>
+              <li> Ced.Jur.<span t-field="o.company_id.vat"/> </li>
+               <li>&amp;bull;</li>
+              <li>Address: del Cruce Escazú, 115 metros oeste, Edificio KATE, San José, Costa Rica</li>
+            </ul>
+            <ul t-if="not o.company_id.custom_footer" class="list-inline">
+                <li t-if="o.company_id.phone">Phone: <span t-field="o.company_id.phone"/></li>
+
+                <li t-if="o.company_id.fax and o.company_id.phone">&amp;bull;</li>
+                <li t-if="o.company_id.fax">Fax: <span t-field="o.company_id.fax"/></li>
+
+                <li t-if="o.company_id.email">&amp;bull;</li>
+                <li t-if="o.company_id.email">Email: <span t-field="o.company_id.email"/></li>
+
+                <li t-if="o.company_id.website">&amp;bull;</li>
+                <li t-if="o.company_id.website"> <span t-field="o.company_id.website"/></li>
+            </ul>
+
+            <t t-if="o.company_id.custom_footer">
+                <span t-raw="o.company_id.rml_footer"/>
+            </t>
+
+            <ul class="list-inline">
+                <li>Page:</li>
+                <li><span class="page"/></li>
+                <li>/</li>
+                <li><span class="topage"/></li>
+            </ul>
+        </div>
+    </div>      
+</t>
+

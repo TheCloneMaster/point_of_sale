@@ -817,8 +817,10 @@
                         <button name="close" type="workflow" string="Validate Closing &amp; Post Entries"
                             attrs="{'invisible' : ['|', ('cash_control', '=', True),('state', '!=', 'opened')]}"
                             class="oe_highlight" />
-                        <button name="close" type="workflow" string="Validate Closing &amp; Post Entries" states="closing_control"
+                        <button name="pre_close" type="workflow" string="Set to Review" states="closing_control"
                             class="oe_highlight" />
+                        <button name="close" type="workflow" string="Validate Closing &amp; Post Entries" states="pre_closed"
+                            class="oe_highlight" groups="point_of_sale.group_pos_manager"/>
                         <button name="print_closing" type="object" string="Imprimir Cierre" states="closed"
                             class="oe_highlight" />
                         
@@ -828,11 +830,11 @@
                     <sheet>
                         <div class="oe_right oe_button_box">
                             <button class="oe_stat_button" name="%(action_pos_box_in)d"
-                                type="action" states="opened,closing_control" icon="fa-level-down">
+                                type="action" states="pre_closed" icon="fa-level-down">
                                 <div>Put<br/>Money In</div>
                             </button>
                             <button class="oe_stat_button" name="%(action_pos_box_out)d"
-                                type="action" states="opened,closing_control" icon="fa-level-up">
+                                type="action" states="pre_closed" icon="fa-level-up">
                                 <div>Take<br/>Money Out</div>
                             </button>
                         </div>

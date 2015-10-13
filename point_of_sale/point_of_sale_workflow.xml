@@ -113,6 +113,14 @@
       <field name="kind">function</field>
     </record>
 
+    <record model="workflow.activity" id="act_pre_close">
+      <field name="wkf_id" ref="wkf_pos_session"/>
+      <field name="flow_stop">False</field>
+      <field name="name">pre_closed</field>
+      <field name="action">wkf_action_pre_close()</field>
+      <field name="kind">function</field>
+    </record>
+
     <record model="workflow.activity" id="act_close">
       <field name="wkf_id" ref="wkf_pos_session"/>
       <field name="flow_stop">True</field>
@@ -135,7 +143,7 @@
       <field name="signal" eval="False" />
       <field name="condition">cash_control == False</field>
     </record>
-    <!-- state:opening_control -> signal:open -> state:opened -> signal:cashbox_control -> state:closing_control -> signal:close -> state:close -->
+    <!-- state:opening_control -> signal:open -> state:opened -> signal:cashbox_control -> state:closing_control -> signal:pre_close -> state:pre_closed -->signal:close -> state:close -->
 
     <record model="workflow.transition" id="trans_opening_control_to_open">
       <field name="act_from" ref="act_opening_control" />
@@ -157,10 +165,10 @@
       <field name="condition">cash_control == False</field>
     </record>
 
-    <record model="workflow.transition" id="trans_closing_control_to_close">
+    <record model="workflow.transition" id="trans_closing_control_to_pre_close">
       <field name="act_from" ref="act_closing_control" />
-      <field name="act_to" ref="act_close" />
-      <field name="signal">close</field>
+      <field name="act_to" ref="act_pre_close" />
+      <field name="signal">pre_close</field>
     </record>
 
     <record model="workflow.transition" id="trans_closing_control_to_close_no_control">
@@ -169,6 +177,11 @@
       <field name="condition">cash_control == False</field>
     </record>
 
+    <record model="workflow.transition" id="pre_close_to_close">
+      <field name="act_from" ref="act_pre_close" />
+      <field name="act_to" ref="act_close" />
+      <field name="signal">close</field>
+    </record>
 
 
   </data>

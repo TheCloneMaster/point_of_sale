@@ -135,18 +135,12 @@ class pos_config(osv.osv):
 
     def name_get(self, cr, uid, ids, context=None):
         result = []
-        states = {
-            'opening_control': _('Opening Control'),
-            'opened': _('In Progress'),
-            'closing_control': _('Closing Control'),
-            'closed': _('Closed & Posted'),
-        }
         for record in self.browse(cr, uid, ids, context=context):
-            if (not record.session_ids) or (record.session_ids[0].state=='closed'):
+            if (not record.session_ids) or (record.session_ids[0].state in ('closed', 'pre_closed')):
                 result.append((record.id, record.name+' ('+_('not used')+')'))
                 continue
             session = record.session_ids[0]
-            result.append((record.id, record.name + ' ('+session.user_id.name+')')) #, '+states[session.state]+')'))
+            result.append((record.id, record.name + ' ('+session.user_id.name+')'))
         return result
 
     def _default_sale_journal(self, cr, uid, context=None):
@@ -238,7 +232,8 @@ class pos_session(osv.osv):
     POS_SESSION_STATE = [
         ('opening_control', 'Opening Control'),  # Signal open
         ('opened', 'In Progress'),                    # Signal closing
-        ('closing_control', 'Closing Control'),  # Signal close
+        ('closing_control', 'Closing Control'),  # Signal pre_close
+        ('pre_closed', 'Waiting Review'),  # Signal close
         ('closed', 'Closed & Posted'),
     ]
 
@@ -359,7 +354,7 @@ class pos_session(osv.osv):
         for session in self.browse(cr, uid, ids, context=None):
             # open if there is no session in 'opening_control', 'opened', 'closing_control' for one user
             domain = [
-                ('state', 'not in', ('closed','closing_control')),
+                ('state', 'not in', ('closed','pre_closed')),
                 ('user_id', '=', session.user_id.id)
             ]
             count = self.search_count(cr, uid, domain, context=context)
@@ -370,7 +365,7 @@ class pos_session(osv.osv):
     def _check_pos_config(self, cr, uid, ids, context=None):
         for session in self.browse(cr, uid, ids, context=None):
             domain = [
-                ('state', '!=', 'closed'),
+                ('state', 'not in', ('closed', 'pre_closed') ),
                 ('config_id', '=', session.config_id.id)
             ]
             count = self.search_count(cr, uid, domain, context=context)
@@ -540,6 +535,10 @@ class pos_session(osv.osv):
             result = urllib2.urlopen(req)
         return {}
 
+    def wkf_action_pre_close(self, cr, uid, ids, context=None):
+        # Set CashBox to review state
+        return self.write(cr, uid, ids, {'state' : 'pre_closed'}, context=context)
+
     def wkf_action_close(self, cr, uid, ids, context=None):
         # Close CashBox
         for record in self.browse(cr, uid, ids, context=context):
@@ -589,7 +588,6 @@ class pos_session(osv.osv):
                     raise osv.except_osv(
                         _('Error!'),
                         _("You cannot confirm all orders of this session, because they have not the 'paid' status"))
-
         return True
 
     def open_frontend_cb(self, cr, uid, ids, context=None):
@@ -635,8 +633,15 @@ class pos_order(osv.osv):
             'journal':      ui_paymentline['journal_id'],
         }
 
-    def _process_order(self, cr, uid, order, context=None):
+    def _process_order(self, cr, uid, order, to_invoice=False, context=None):
         order_id = self.create(cr, uid, self._order_fields(cr, uid, order, context=context),context)
+
+        session = self.pool.get('pos.session').browse(cr, uid, order['pos_session_id'], context=context)
+        if session.sequence_number <= order['sequence_number']:
+            session.write({'sequence_number': order['sequence_number'] + 1})
+            session.refresh()
+        if to_invoice:
+            return order_id  #should not create entry on bank/cash journal
 
         paymentsList = order.get('statement_ids',[])
         for payments in paymentsList:
@@ -645,11 +650,6 @@ class pos_order(osv.osv):
             adjusted_date = fields.datetime.context_timestamp(cr, uid, original_date)
             payment_fields['payment_date'] = adjusted_date.strftime('%Y-%m-%d %H:%M:%S')
             self.add_payment(cr, uid, order_id, payment_fields, context=context)
-
-        session = self.pool.get('pos.session').browse(cr, uid, order['pos_session_id'], context=context)
-        if session.sequence_number <= order['sequence_number']:
-            session.write({'sequence_number': order['sequence_number'] + 1})
-            session.refresh()
 
         if paymentsList and not float_is_zero(order['amount_return'], self.pool.get('decimal.precision').precision_get(cr, uid, 'Account')):
             cash_journal = session.cash_journal_id
@@ -680,7 +680,7 @@ class pos_order(osv.osv):
         for tmp_order in orders_to_save:
             to_invoice = tmp_order['to_invoice']
             order = tmp_order['data']
-            order_id = self._process_order(cr, uid, order, context=context)
+            order_id = self._process_order(cr, uid, order, to_invoice, context=context)
             order_ids.append(order_id)
             paymentsList = order.get('statement_ids',[])
             if paymentsList:
@@ -743,7 +743,7 @@ class pos_order(osv.osv):
                 'amount_return':0.0,
                 'amount_tax':0.0,
             }
-            val1 = val2 = 0.0
+            val1 = val2 = val3 = 0.0
             cur = order.pricelist_id.currency_id
             for payment in order.statement_ids:
                 res[order.id]['amount_paid'] +=  payment.amount
@@ -751,6 +751,8 @@ class pos_order(osv.osv):
             for line in order.lines:
                 val1 += line.price_subtotal
                 val2 += line.price_subtotal_incl
+                val3 += line.price_unit * line.qty
+            res[order.id]['amount_base'] = cur_obj.round(cr, uid, cur, val3)
             res[order.id]['amount_subtotal'] = cur_obj.round(cr, uid, cur, val1)
             res[order.id]['amount_tax'] = cur_obj.round(cr, uid, cur, val2-val1)
             res[order.id]['amount_total'] = cur_obj.round(cr, uid, cur, val2)
@@ -765,6 +767,7 @@ class pos_order(osv.osv):
         'amount_subtotal': fields.function(_amount_all, string='Subtotal', multi='all'),
         'amount_tax': fields.function(_amount_all, string='Taxes', digits_compute=dp.get_precision('Account'), multi='all'),
         'amount_total': fields.function(_amount_all, string='Total', digits_compute=dp.get_precision('Account'),  multi='all'),
+        'amount_base': fields.function(_amount_all, string='Base amount', digits_compute=dp.get_precision('Account'),  multi='all'),
         'amount_paid': fields.function(_amount_all, string='Paid', states={'draft': [('readonly', False)]}, readonly=True, digits_compute=dp.get_precision('Account'), multi='all'),
         'amount_return': fields.function(_amount_all, 'Returned', digits_compute=dp.get_precision('Account'), multi='all'),
         'lines': fields.one2many('pos.order.line', 'order_id', 'Order Lines', states={'draft': [('readonly', False)]}, readonly=True, copy=True),
@@ -1280,7 +1283,7 @@ class pos_order(osv.osv):
                     'partner_id': order.partner_id and self.pool.get("res.partner")._find_accounting_partner(order.partner_id).id or False
                 })
 
-                '''
+                ##''
                 dacc = line.product_id.property_stock_account_output and line.product_id.property_stock_account_output.id
                 if not dacc:
                     dacc = line.product_id.categ_id.property_stock_account_output_categ and line.product_id.categ_id.property_stock_account_output_categ.id
@@ -1317,7 +1320,7 @@ class pos_order(osv.osv):
                     #'tax_amount': tax_amount,
                     'partner_id': order.partner_id and self.pool.get("res.partner")._find_accounting_partner(order.partner_id).id or False
                 })
-                '''
+                ##''
 
                 # For each remaining tax with a code, whe create a move line
                 for tax in computed_taxes:

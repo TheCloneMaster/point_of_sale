@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<t t-name="account.report_invoice_document">
+            <div class="header">
+                <div class="row mt32 mb32">
+                    <div class="col-xs-6">
+                            <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="max-height: 100px;"/>
+                    </div>
+                    <div class="col-xs-1"/>
+                    <div class="col-xs-5">
+                        <span style="font-size:5.0px"><br/></span>
+                        <span t-field="o.company_id.name"/><br/>
+                        Ced.Jur.<span t-field="o.company_id.vat"/><br/>
+                        Del Cruce Escazú, 115 metros oeste<br/>
+                    <h3>
+                        <span t-if="o.amount_total &gt;= 0">Factura No. </span> 
+                        <span t-if="o.amount_total &lt; 0">Nota de Crédito No. </span> 
+                        <span t-field="o.number"/> 
+                    </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page" style="border:1px solid black;"> 
+               <table style="WIDTH:100%">
+                  <tr>
+                    <td>
+                        <table style="WIDTH:100%" class="table-condensed">
+                            <tr>
+                                <td style="WIDTH:10%"></td>
+                                <td style="WIDTH:12.5%"><strong>Señor(a):</strong></td>
+                                <td style="WIDTH:37.5%">
+                                    <span t-field="o.partner_id.name"/>
+                                </td>
+                                <td style="WIDTH:15%"><strong>Fecha</strong></td>
+                                <td style="WIDTH:30%">
+                                    <span t-esc="o.date_invoice[0:10]"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><strong>Dirección</strong></td>
+                                <td>
+                                    <span t-field="o.partner_id.street"/>
+                                </td>
+                                <td><strong>Teléfono:</strong></td>
+                                <td>
+                                    <span t-field="o.partner_id.phone"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><strong>Email:</strong></td>
+                                <td>
+                                    <span t-field="o.partner_id.email"/>
+                                </td>
+                                <td><strong>Orden de Compra:</strong></td>
+                                <td>
+                                    <span t-field="o.origin"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><strong>Observaciones:</strong></td>
+                                <td>
+                                    <span t-field="o.comment"/>
+                                </td>
+                                <td><strong>Rep:</strong></td>
+                                <td>
+                                    <span t-field="o.user_id.name"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
+                        <br/>
+    
+                        <table class="table-condensed" style="WIDTH:100%">
+                            <thead>
+                                <tr class="border-black">
+                                    <th style="WIDTH:45%">Item</th>
+                                    <th style="WIDTH:7%" class="text-right">Cant.</th>
+                                    <th style="WIDTH:13%" class="text-right">Precio Unit.</th>
+                                    <th style="WIDTH:7%" class="text-right">%Desc.</th>
+                                    <th style="WIDTH:13%" class="text-right">Precio</th>
+                                    <th style="WIDTH:15%" class="text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody class="invoice_tbody">
+                                <tr t-foreach="o.invoice_line" t-as="l">
+                                    <td><span t-field="l.name"/></td>
+                                    <td class="text-right">
+                                        <span t-field="l.quantity"/>
+                                    </td>
+                                    <td class="text-right">
+                                        $<span t-field="l.price_unit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="l.discount"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-esc="l.price_unit-l.price_unit*l.discount/100"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="l.price_subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                  </tr>
+
+                  <tr> <td>
+                      <table style="WIDTH:100%" class="table-condensed">
+                          <tr>
+                              <td style="font-size:9.0px;WIDTH:70%" class="text-justify">
+                                <span t-if="o.amount_total &gt;= 0">
+                                 Esta factura constituye título ejecutivo, de acuerdo con las disposiciones del artículo 460 del código de comercio vigente.
+                                 No se aceptan devoluciones de mercadería en descuento. Cambios de mercadería se aceptan únicamente dentro de
+                                 los siguientes 7 días hábiles, en sus empaques originales con todas las etiquetas puestas y en buen estado. No se
+                                 hacen devoluciones de dinero sino crédito de tienda únicamente. Al cancelar esta factura, el/la cliente(a) acepta 
+                                 expresamente las condiciones de la venta anteriormente descritas
+                                 </span> 
+                                <span t-if="o.amount_total &lt; 0">
+                                        Esta nota de crédito tiene una validez de tres meses a partir de la fecha indicada.
+                                 </span> 
+                              </td>
+                              <td style="WIDTH:30%">
+                                        <table class="table table-condensed">
+                                            <tr class="border-black">
+                                                <td><strong>Subtotal</strong></td>
+                                                <td class="text-right">
+                                                    $<span t-esc="formatLang(o.amount_untaxed, digits=2)"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Impuestos</td>
+                                                <td class="text-right">
+                                                    $<span t-esc="formatLang(o.amount_tax, digits=2)"/>
+                                                </td>
+                                            </tr>
+                                            <tr class="border-black">
+                                                <td><strong>Total</strong></td>
+                                                <td class="text-right">
+                                                    $<span t-esc="formatLang(o.amount_total, digits=2)"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                              </td>
+                          </tr>
+                      </table>
+                  </td> </tr>
+               </table>
+            </div>
+
+    <div class="footer">
+        <div class="text-center" style="border-top: 1px solid black;">
+            <ul class="list-inline">
+              <li> <span t-field="o.company_id.name"/> </li>
+               <li>&amp;bull;</li>
+              <li> Ced.Jur.<span t-field="o.company_id.vat"/> </li>
+               <li>&amp;bull;</li>
+              <li>Adress: del Cruce Escazú, 115 metros oeste, Edificio KATE, San José, Costa Rica</li>
+            </ul>
+            <ul t-if="not o.company_id.custom_footer" class="list-inline">
+                <li t-if="o.company_id.phone">Phone: <span t-field="o.company_id.phone"/></li>
+                <li t-if="o.company_id.fax and o.company_id.phone">&amp;bull;</li>
+                <li t-if="o.company_id.fax">Fax: <span t-field="o.company_id.fax"/></li>
+
+                <li t-if="o.company_id.email">&amp;bull;</li>
+                <li t-if="o.company_id.email">Email: <span t-field="o.company_id.email"/></li>
+
+                <li t-if="o.company_id.website">&amp;bull;</li>
+                <li t-if="o.company_id.website"> <span t-field="o.company_id.website"/></li>
+            </ul>
+            <ul style="font-size:8.0px" class="list-inline"> Autorizado mediante resolución #11-97 de la Dirección General de Tributación Directa, publicado en el diario oficial La Gaceta #171 el 5 de septiembre de 1997
+            </ul>
+        </div>
+    </div>      
+</t>
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_pos_invoice_qweb_document">
+<t t-name="purple_pos_invoice_qweb.report_pos_invoice_qweb_document">
+    
+
+
+
+</t></template>
+
+<template id="report_pos_invoice_qweb">
+    <t t-call="report.html_container">
+        <t t-foreach="doc_ids" t-as="doc_id">
+            <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'purple_pos_invoice_qweb.report_pos_invoice_qweb_document')"/>
+        </t>
+    </t>
+</template>
+</data>
+</openerp>
