@@ -55,9 +55,13 @@ class pos_summary(report_sxw.rml_parse):
                 total = pos.amount_total
             else:
                 subtotal = tax = total = 0
+            if pos.invoice_id:
+                pos_name = pos.name + "-" +pos.invoice_id.number
+            else
+                pos_name = pos.name
 
             result = {
-                'pos_name': pos.name + (pos.invoice_id and "-"+pos.invoice_id.number or ""),
+                'pos_name': pos_name,
                 'date_order': pos.date_order,
                 'subtotal': subtotal,
                 'tax': tax,
