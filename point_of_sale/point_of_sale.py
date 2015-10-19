@@ -1283,7 +1283,7 @@ class pos_order(osv.osv):
                     'partner_id': order.partner_id and self.pool.get("res.partner")._find_accounting_partner(order.partner_id).id or False
                 })
 
-                ##''
+                '''
                 dacc = line.product_id.property_stock_account_output and line.product_id.property_stock_account_output.id
                 if not dacc:
                     dacc = line.product_id.categ_id.property_stock_account_output_categ and line.product_id.categ_id.property_stock_account_output_categ.id
@@ -1320,7 +1320,7 @@ class pos_order(osv.osv):
                     #'tax_amount': tax_amount,
                     'partner_id': order.partner_id and self.pool.get("res.partner")._find_accounting_partner(order.partner_id).id or False
                 })
-                ##''
+                '''
 
                 # For each remaining tax with a code, whe create a move line
                 for tax in computed_taxes:
