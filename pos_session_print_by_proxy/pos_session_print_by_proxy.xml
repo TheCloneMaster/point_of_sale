@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    <template id="assets_backend" name="print_pos_session" inherit_id="web.assets_backend">
+      <xpath expr="." position="inside">
+          <script type="text/javascript" src="/pos_session_print_by_proxy/static/src/js/main.js" />
+          <script type="text/javascript" src="/pos_session_print_by_proxy/static/src/js/print.js" />
+      </xpath>
+    </template>
+
+    <record id="action_print_pos_session" model="ir.actions.client">
+        <field name="name">Print POS Session</field>
+        <field name="tag">print_action_pos_session2</field>
+        <field name="context">{'pos_session_ids': [active_id]}</field>
+    </record>
+
+    <record id="invoice_form" model="ir.ui.view">
+        <field name="name">pos.session.form</field>
+        <field name="model">pos.session</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_session_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='close']" position="after">
+                 <button name="%(pos_session_print_by_proxy.action_print_pos_session)d" string="Imprimir Cierre" type="action" attrs="{'invisible': ['|',('state','not in',('closed','pre_closed'))]}"/>
+                 <button name="%(pos_session_print_by_proxy.action_print_pos_session)d" string="Imprimir Arqueo" type="action" attrs="{'invisible': ['|',('state','in',('closed','pre_closed'))]}"/>
+            </xpath>
+        </field>
+    </record>
+
+</data>
+</openerp>

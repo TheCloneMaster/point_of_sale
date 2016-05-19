@@ -20,6 +20,8 @@ openerp.point_of_sale = function(instance) {
     
     openerp_pos_widgets(instance,module);    // import pos_widgets.js
 
+    openerp_restaurant_notes(instance,module);
+
     instance.web.client_actions.add('pos.ui', 'instance.point_of_sale.PosWidget');
 };
 

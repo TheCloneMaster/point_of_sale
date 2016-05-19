@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    <template id="assets_backend" name="print_invoice" inherit_id="web.assets_backend">
+      <xpath expr="." position="inside">
+          <script type="text/javascript" src="/account_invoice_print_by_proxy/static/src/js/print.js" />
+          <script type="text/javascript" src="/account_invoice_print_by_proxy/static/src/js/main.js" />
+      </xpath>
+    </template>
+
+    <record id="action_print_invoice" model="ir.actions.client">
+        <field name="name">Button Action</field>
+        <field name="tag">print_action_invoice</field>
+        <field name="context">{'invoice_ids': [active_id]}</field>
+    </record>
+
+    <record id="invoice_form" model="ir.ui.view">
+        <field name="name">account.invoice.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='invoice_print']" position="after">
+                 <button name="%(action_print_invoice)d" string="Imprimir factura" type="action" attrs="{'invisible': ['|',('state','not in',('open','paid'))]}" confirm="¿Seguro de imprimir?"/>
+            </xpath>
+            <xpath expr="//button[@name='invoice_print']" position="replace">
+            </xpath>
+        </field>
+    </record>
+
+</data>
+</openerp>

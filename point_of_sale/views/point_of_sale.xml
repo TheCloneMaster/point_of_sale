@@ -14,6 +14,7 @@
                 <script type="text/javascript" src="/point_of_sale/static/src/js/widgets.js"></script>
                 <script type="text/javascript" src="/point_of_sale/static/src/js/devices.js"></script>
                 <script type="text/javascript" src="/point_of_sale/static/src/js/screens.js"></script>
+                <script type="text/javascript" src="/point_of_sale/static/src/js/notes.js"></script>
                 <script type="text/javascript" src="/point_of_sale/static/src/js/tests.js"></script>
                 <script type="text/javascript" src="/point_of_sale/static/src/js/main.js"></script>
             </xpath>

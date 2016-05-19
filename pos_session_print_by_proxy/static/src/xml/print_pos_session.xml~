@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="XmlPosSession">
+        <receipt align='center' tabwidth='0' width='40' value-thousands-separator=',' >
+            <h2><t t-esc='receipt.company' /></h2><br/>
+            <h2>CIERRE DE CAJA</h2><br/>
+            <div>Sesion:<t t-esc='receipt.name' /></div>
+            <div>Apertura:<t t-esc='receipt.start_at' /></div>
+            <div>Cierre:<t t-esc='receipt.stop_at' /></div>
+            <div>Terminal:<t t-esc='receipt.point_of_sale' /></div>
+            <div>Cajero:<t t-esc='receipt.responsible' /></div>
+            <br/><br/>
+            <div>--------------------------------</div>
+            <div>Totales por Forma de Pago</div>
+            <div>--------------------------------</div>
+            <t t-foreach='receipt.journal_lines' t-as='line'>
+                <line>
+                    <left> <t t-esc='line.name' /> </left>
+                    <right> <t t-esc='line.total' /> </right>
+                </line>
+            </t>
+            <div>--------------------------------</div>
+            <div line-ratio='0.70'>
+                <line>
+                    <left> <pre>     TOTAL</pre> </left>
+                    <right> <t t-esc='receipt.journal_total' /> </right>
+                </line>
+            </div>
+            <div>--------------------------------</div>
+            <t t-foreach='receipt.categ_lines' t-as='line'>
+                <line>
+                    <left> <t t-esc='line.name' /> </left>
+                    <right> <t t-esc='line.total' /> </right>
+                </line>
+            </t>
+            <div>--------------------------------</div>
+            <div line-ratio='0.70'>
+                <line>
+                    <left> <pre>    SUBTOTAL</pre> </left>
+                    <right> <t t-esc='receipt.orders_subtotal' /> </right>
+                </line>
+                <line>
+                    <left> <pre>IMP.SERVICIO</pre> </left>
+                    <right> <t t-esc='receipt.orders_tax' /> </right>
+                </line>
+                <line><right>--------</right></line>
+                <line class='total' size='double-height'>
+                    <left><pre>        TOTAL</pre></left>
+                    <right><value><t t-esc='receipt.orders_total' /></value></right>
+                </line>
+            </div>
+        </receipt>
+    </t>
+</templates>

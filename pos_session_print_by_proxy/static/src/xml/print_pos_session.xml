@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="XmlPosSession">
+        <receipt align='center' tabwidth='0' width='32' value-thousands-separator=',' >
+            <h2><t t-esc='receipt.company' /></h2><br/>
+            <t t-if="receipt.state in {'pre_closed':'', 'closed':''}"><h2>CIERRE DE CAJA</h2></t>
+            <t t-if="receipt.state in {'opened':'', 'closing_control':''}"><h2>ARQUEO DE CAJA</h2></t>
+            <br/>
+            <div>Sesion:<t t-esc='receipt.name' /></div>
+            <div>Apertura:<t t-esc='receipt.start_at' /></div>
+            <div t-if="receipt.stop_at">Cierre:<t t-esc='receipt.stop_at' /></div>
+            <div>Terminal:<t t-esc='receipt.point_of_sale' /></div>
+            <div>Cajero:<t t-esc='receipt.responsible' /></div>
+            <br/><br/>
+            <div>--------------------------------</div>
+            <div>Totales por Forma de Pago</div>
+            <div>--------------------------------</div>
+            <t t-foreach='receipt.journal_lines' t-as='line'>
+                <div><t t-esc='line.name' /></div>
+                <line>
+                    <left>Teorico:</left>
+                    <right><value><t t-esc='line.total' /></value></right>
+                </line>
+                <line t-if="line.total_real">
+                    <left>Real:</left>
+                    <right><value><t t-esc='line.total_real' /></value></right>
+                </line>
+            </t>
+            <div>--------------------------------</div>
+            <div line-ratio='0.70'>
+                <line>
+                    <left> <pre>     TOTAL</pre> </left>
+                    <right><value><t t-esc='receipt.journal_total' /></value></right>
+                </line>
+            </div>
+            <div>--------------------------------</div>
+            <t t-foreach='receipt.categ_lines' t-as='line'>
+                <line>
+                    <left><t t-esc='line.qty' />x <t t-esc='line.name' /> </left>
+                    <right><value><t t-esc='line.total' /></value></right>
+                </line>
+            </t>
+            <div>--------------------------------</div>
+            <div line-ratio='0.70'>
+                <line>
+                    <left> <pre>    SUBTOTAL</pre> </left>
+                    <right><value><t t-esc='receipt.orders_subtotal' /></value></right>
+                </line>
+                <line>
+                    <left> <pre>IMP.SERVICIO</pre> </left>
+                    <right><value><t t-esc='receipt.orders_tax' /></value></right>
+                </line>
+                <line><right>--------</right></line>
+                <line class='total' size='double-height'>
+                    <left><pre>        TOTAL</pre></left>
+                    <right><value><t t-esc='receipt.orders_total' /></value></right>
+                </line>
+            </div>
+            <cashdraw/>
+        </receipt>
+    </t>
+</templates>

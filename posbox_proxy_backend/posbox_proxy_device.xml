@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    <template id="assets_backend" name="proxy_device" inherit_id="web.assets_backend">
+      <xpath expr="." position="inside">
+          <script type="text/javascript" src="/posbox_proxy_backend/static/src/js/device.js" />
+          <script type="text/javascript" src="/posbox_proxy_backend/static/src/js/main.js" />
+      </xpath>
+    </template>
+
+    <record id="proxy_backend_view_tree" model="ir.ui.view">
+        <field name="name">posbox.proxy.backend.view.tree</field>
+        <field name="model">posbox.proxy.backend</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Proxy backend" create="true" editable="top">
+                <field name="name"/>
+                <field name="value_ip"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_config_proxy_backend" model="ir.actions.act_window">
+        <field name="name">Config proxy backend</field>
+        <field name="res_model">posbox.proxy.backend</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+    name="Proxy backend"
+    id="menu_proxy_backend"
+    action="action_config_proxy_backend"
+    parent="base.menu_config"/>
+
+</data>
+</openerp>

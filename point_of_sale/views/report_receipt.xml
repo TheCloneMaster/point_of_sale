@@ -4,28 +4,31 @@
 <template id="report_receipt_base">
     <t t-call="report.html_container">
         <t t-foreach="docs" t-as="o">
-            <div class="page">
-                <h2><t t-esc='o.company_id.name' /></h2>
+            <div class="page" style="font-size:9.0px">
+                <h4><t t-esc="o.company_id.name"/></h4>
                 <div>
-                    <t t-if='o.company_id.vat'>
-                        <div>Céd.Jurídica: <t t-esc='o.company_id.vat' /></div>
+                    <t t-if="o.company_id.vat">
+                        <div>Céd.Jurídica: <t t-esc="o.company_id.vat"/></div>
                     </t>
-                    <t t-if='o.company_id.street'>
-                        <div><t t-esc='o.company_id.street' /></div>
+                    <t t-if="o.company_id.street">
+                        <div><t t-esc="o.company_id.street"/></div>
                     </t>
-                    <t t-if='o.company_id.phone'>
-                        <div>Teléfono: <t t-esc='o.company_id.phone' /></div>
+                    <t t-if="o.company_id.phone">
+                        <div>Teléfono: <t t-esc="o.company_id.phone"/></div>
                     </t>
                     <br/>
                     <div>
-                        <div><t t-esc='o.name' /></div>
-                        <div><t t-esc='o.date_order' /></div>
-                    </div>
-                    <t t-if='o.user_id'>
-                        <div>Cajero: <t t-esc='o.user_id.name' /></div>
+                    <t t-if="o.amount_total &lt; 0">
+                        <h4>D E V O L U C I O N!</h4>
                     </t>
-                    <t t-if='o.partner_id'>
-                        <div>Cliente: <t t-esc='o.partner_id.name' /></div>
+                        <div>Tiquete:<t t-esc="o.name"/></div>
+                        <div>Fecha:<t t-esc="o.date_order"/></div>
+                    </div>
+                    <t t-if="o.user_id">
+                        <div>Cajero: <t t-esc="o.user_id.name"/></div>
+                    </t>
+                    <t t-if="o.partner_id">
+                        <div>Cliente: <t t-esc="o.partner_id.name"/></div>
                     </t>
                     <br/>
                     <div>-----------------------------------------</div>
@@ -40,7 +43,7 @@
                                 </t>
                                 <t t-esc="line.product_id.name"/>
                             </td>
-                            <td  style="width: 30%" class="text-right">
+                            <td style="width: 30%" class="text-right">
                                 <t t-if="o.state != 'cancel' and o.statement_ids">
                                     <span t-esc="formatLang(line.price_subtotal_incl, currency_obj=res_company.currency_id)"/>
                                 </t>
@@ -72,12 +75,6 @@
                 </div>
 
                 <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Payment Mode</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
                     <tbody>
                         <tr t-foreach="get_journal_amt(o)" t-as="d">
                             <td>
@@ -89,6 +86,8 @@
                         </tr>
                     </tbody>
                 </table>
+    <div class="text-center"> Autorizado mediante resolución #11-97 de la Dirección General de Tributación Directa, publicado en el diario oficial La Gaceta #171 el 5 de septiembre de 1997
+    </div>
             </div>
         </t>
     </t>

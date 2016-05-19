@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="XmlInvoice">
+        <receipt align='left' tabwidth='0' width='135' value-thousands-separator='' >
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div line-ratio='0.80' bold="on">
+                <line>
+                    <left>
+                         <t t-if="receipt.partner.name">
+                            <div><pre>      <t t-esc='receipt.partner.name'/></pre></div><!--6 spaces-->
+                        </t>
+                    </left>
+                    <right>
+                        <div><t t-esc='receipt.number' /></div>
+                    </right>
+                </line>
+            </div>
+            <div line-ratio='0.70' bold="on">
+                <line>
+                    <left>
+                        <t t-if="receipt.partner.street">
+                            <div><pre>      <t t-esc='receipt.partner.street'/></pre></div><!--6 spaces-->
+                        </t>
+                    </left>
+                    <right>
+                         <t t-if='receipt.partner.vat'>
+                            <pre><t t-esc='receipt.partner.vat' /></pre>
+                        </t>
+                        <pre><t t-esc='receipt.date_invoice' /></pre>
+                    </right>
+                </line>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <t t-set="total_product" t-value="0"/>
+            <t t-foreach='receipt.invoice_line' t-as='line'>
+                <t t-set="total_product" t-value="total_product+1"/>
+            </t>
+            <div line-ratio='0.80'>
+                <t t-foreach='receipt.invoice_line' t-as='line'>
+                    <line>
+                        <left>
+                            <pre><t t-esc='line.product.quantity' />  </pre>
+                            <t t-if='line.product.default_code'>
+                                <pre>[<t t-esc='line.product.default_code' />]   </pre>
+                                <t t-esc='line.product.name' />
+                            </t>
+                        </left>
+                        <right>
+                            <pre><t t-esc='line.product.price_unit_str' /></pre>
+                            <pre><t t-esc='line.product.price_subtotal_str' /></pre>
+                        </right>
+                    </line>
+                </t>
+            </div>
+            <t t-foreach='receipt.max_product' t-as='space'>
+                <t t-if="space_index > total_product-1">
+                    <br/>
+                </t>
+            </t>
+            <line>
+                <left>
+                    <t t-esc='receipt.amount_text'/>
+                </left>
+            </line>
+            <line size='double-height'>
+                <right><t t-esc='receipt.currency.symbol'/><value><t t-esc='receipt.amount_total' /></value></right>
+            </line>
+            <t t-esc='receipt.number' />
+        </receipt>
+    </t>
+</templates>
