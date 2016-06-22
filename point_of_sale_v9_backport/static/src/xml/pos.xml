@@ -675,6 +675,9 @@
                         <div align='left'>
                             <t t-esc='line.product_name' /> <t t-if='line.discount'> (<t t-esc='line.discount' />%) </t>
                         </div>
+                        <t t-if="line.note"><div align='left'>
+                            <t t-esc='line.product_name' /> <t t-if='line.discount'> (<t t-esc='line.discount' />%) </t>
+                        </div> </t>
                 </t>
             </div>
 

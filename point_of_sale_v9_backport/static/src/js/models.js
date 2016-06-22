@@ -1235,8 +1235,8 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
                 user_id: this.pos.cashier ? this.pos.cashier.id : this.pos.user.id,
                 uid: this.uid,
                 sequence_number: this.sequence_number,
-                phone_no: $("#client_phone").val(),          // probuse
-                sale_person_code: $("#sale_p_code").val(),   //
+                //phone_no: $("#client_phone").val(),          // probuse
+                //sale_person_code: $("#sale_p_code").val(),   //
             };
         },
         

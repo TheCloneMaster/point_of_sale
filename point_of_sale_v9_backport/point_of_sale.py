@@ -654,8 +654,8 @@ class pos_order(osv.osv):
             'lines':        ui_order['lines'],
             'pos_reference':ui_order['name'],
             'partner_id':   ui_order['partner_id'] or False,
-            'sale_person_code': ui_order['sale_person_code'],
-            'phone_no' : ui_order['phone_no']
+            #'sale_person_code': ui_order['sale_person_code'],
+            #'phone_no' : ui_order['phone_no']
         }
 
     def _payment_fields(self, cr, uid, ui_paymentline, context=None):
@@ -833,8 +833,8 @@ class pos_order(osv.osv):
         'nb_print': fields.integer('Number of Print', readonly=True, copy=False),
         'pos_reference': fields.char('Receipt Ref', readonly=True, copy=False),
         'sale_journal': fields.related('session_id', 'config_id', 'journal_id', relation='account.journal', type='many2one', string='Sale Journal', store=True, readonly=True),
-        'sale_person_code': fields.char("Sale Person Code"),#probuse
-        'phone_no': fields.char("Phone no.")#probuse
+        #'sale_person_code': fields.char("Sale Person Code"),#probuse
+        #'phone_no': fields.char("Phone no.")#probuse
     }
 
     def _default_session(self, cr, uid, context=None):
