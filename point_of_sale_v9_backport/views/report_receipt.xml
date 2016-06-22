@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_receipt_base">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <div class="page" style="font-size:9.0px">
+                <h4><t t-esc="o.company_id.name"/></h4>
+                <div>
+                    <t t-if="o.company_id.vat">
+                        <div>Céd.Jurídica: <t t-esc="o.company_id.vat"/></div>
+                    </t>
+                    <t t-if="o.company_id.street">
+                        <div><t t-esc="o.company_id.street"/></div>
+                    </t>
+                    <t t-if="o.company_id.phone">
+                        <div>Teléfono: <t t-esc="o.company_id.phone"/></div>
+                    </t>
+                    <br/>
+                    <div>
+                    <t t-if="o.amount_total &lt; 0">
+                        <h4>D E V O L U C I O N!</h4>
+                    </t>
+                        <div>Tiquete:<t t-esc="o.name"/></div>
+                        <div>Fecha:<t t-esc="o.date_order"/></div>
+                    </div>
+                    <t t-if="o.user_id">
+                        <div>Cajero: <t t-esc="o.user_id.name"/></div>
+                    </t>
+                    <t t-if="o.partner_id">
+                        <div>Cliente: <t t-esc="o.partner_id.name"/></div>
+                    </t>
+                    <br/>
+                    <div>-----------------------------------------</div>
+                </div>
+
+                <table class="table table-condensed">
+                    <tbody>
+                        <tr t-foreach="o.lines" t-as="line">
+                            <td style="width: 70%">
+                                <t t-if="o.state != 'cancel' and o.statement_ids">
+                                    <span t-esc="'%.f' % line.qty"/>x
+                                </t>
+                                <t t-esc="line.product_id.name"/>
+                            </td>
+                            <td style="width: 30%" class="text-right">
+                                <t t-if="o.state != 'cancel' and o.statement_ids">
+                                    <span t-esc="formatLang(line.price_subtotal_incl, currency_obj=res_company.currency_id)"/>
+                                </t>
+                                <t t-if="line.discount != 0.0">
+                                    (<span t-esc="formatLang(line.discount, currency_obj=res_company.currency_id)"/>%)
+                                </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-xs-8 pull-right">
+                        <table class="table table-condensed">
+                            <tr class="border-black">
+                                <td><strong>Taxes</strong></td>
+                                <td class="text-right">
+                                    <strong t-esc="formatLang(o.amount_tax, currency_obj=res_company.currency_id)"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td class="text-right">
+                                    <strong t-esc="formatLang(o.amount_total, currency_obj=res_company.currency_id)"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <table class="table table-condensed">
+                    <tbody>
+                        <tr t-foreach="get_journal_amt(o)" t-as="d">
+                            <td>
+                                <span t-esc="d['name']"/>
+                            </td>
+                            <td>
+                                <span t-esc="formatLang(d['amt'], currency_obj=res_company.currency_id)"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+    <div class="text-center"> Autorizado mediante resolución #11-97 de la Dirección General de Tributación Directa, publicado en el diario oficial La Gaceta #171 el 5 de septiembre de 1997
+    </div>
+            </div>
+        </t>
+    </t>
+</template>
+</data>
+</openerp>

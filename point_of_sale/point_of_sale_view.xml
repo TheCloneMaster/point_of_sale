@@ -697,6 +697,7 @@
                             </group>
                             <group>
                                 <field name="iface_big_scrollbars" />
+                                <field name="iface_orderline_notes" />
                             </group>
                         </group>
                         <group string="Hardware Proxy" >
