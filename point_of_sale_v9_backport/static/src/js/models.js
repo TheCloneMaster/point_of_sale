@@ -935,7 +935,7 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
                 tax:                this.get_tax(),
                 product_description:      this.get_product().description,
                 product_description_sale: this.get_product().description_sale,
-                category_name: this.pos.db.category_by_id[this.get_product().pos_categ_id[0]].parent_id[1],
+                //category_name: this.pos.db.category_by_id[this.get_product().pos_categ_id[0]].parent_id[1],
             };
         },
         // changes the base price of the product for this orderline
