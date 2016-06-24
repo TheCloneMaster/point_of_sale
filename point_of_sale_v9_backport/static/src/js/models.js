@@ -1155,7 +1155,8 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
             } else {
                 this.sequence_number = this.pos.pos_session.sequence_number++;
                 this.uid  = this.generate_unique_id();
-                this.name = _t("Order ") + this.uid; 
+                //this.name = _t("Order ") + this.uid; 
+                this.name = this.uid; 
             }
 
             this.on('change',              function(){ this.save_to_db("order:change"); }, this);

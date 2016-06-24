@@ -1162,7 +1162,7 @@
                 <div>Teléfono: <t t-esc='widget.pos.company.phone' /></div>
             </div>
             <br />
-            <div>Tiquete:<t t-esc="order.get_name()"/></div>
+            <div>Factura:<t t-esc="order.get_name()"/></div>
             <div>Fecha:<t t-esc="new Date().toString(Date.CultureInfo.formatPatterns.shortDate + ' ' +
                 Date.CultureInfo.formatPatterns.longTime)"/></div>
             <!--t t-esc="widget.pos.company.name"/><br /-->
