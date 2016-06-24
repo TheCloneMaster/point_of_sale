@@ -1182,7 +1182,8 @@ function openerp_pos_models(instance, module){ //module is instance.point_of_sal
             this.pos.pos_session.sequence_number = Math.max(this.sequence_number+1,this.pos.pos_session.sequence_number);
             this.session_id    = json.pos_session_id;
             this.uid = json.uid;
-            this.name = _t("Order ") + this.uid;
+            //this.name = _t("Order ") + this.uid;
+            this.name = this.uid;
             if (json.partner_id) {
                 var client = this.pos.db.get_partner_by_id(json.partner_id);
                 if (!client) {
