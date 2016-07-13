@@ -1508,6 +1508,7 @@ class pos_order_line(osv.osv):
         'discount': fields.float('Discount (%)', digits_compute=dp.get_precision('Account')),
         'order_id': fields.many2one('pos.order', 'Order Ref', ondelete='cascade'),
         'create_date': fields.datetime('Creation Date', readonly=True),
+        'note': fields.char('Note', copy=True),
     }
 
     _defaults = {
