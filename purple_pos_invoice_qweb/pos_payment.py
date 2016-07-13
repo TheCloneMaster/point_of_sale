@@ -49,7 +49,7 @@ class pos_make_payment(osv.osv_memory):
             wf_service = netsvc.LocalService("workflow")
             wf_service.trg_validate(uid, 'pos.order', active_id, 'paid', cr)
             #return self.print_report(cr, uid, ids, context=context) 
-        ## {'type' : 'ir.actions.act_window_close' }
+            return {'type' : 'ir.actions.act_window_close' }
 
         return self.launch_payment(cr, uid, ids, context=context)
 
