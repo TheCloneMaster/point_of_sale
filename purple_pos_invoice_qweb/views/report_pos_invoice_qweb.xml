@@ -13,7 +13,7 @@
                         <span style="font-size:5.0px"><br/></span>
                         <span t-field="o.company_id.name"/><br/>
                         Ced.Jur.<span t-field="o.company_id.vat"/><br/>
-                        Del Cruce Escazú, 115 metros oeste<br/>
+                        <span t-field="o.company_id.street"/><span t-field="o.company_id.street2"/><br/>
                     <h3>
                         <span t-if="o.amount_total &gt;= 0">Factura No. </span> 
                         <span t-if="o.amount_total &lt; 0">Nota de Crédito No. </span> 
@@ -88,21 +88,21 @@
                             </thead>
                             <tbody class="invoice_tbody">
                                 <tr t-foreach="o.lines" t-as="l">
-                                    <td><span t-field="l.product_id.name"/></td>
+                                    <td><span t-field="l.product_id.name"/><span t-field="l.note"/></td>
                                     <td class="text-right">
                                         <span t-esc="formatLang(l.qty, digits=0)"/>
                                     </td>
                                     <td class="text-right">
-                                        $<span t-esc="formatLang(l.price_unit, digits=2)"/>
+                                        Ȼ<span t-esc="formatLang(l.price_unit, digits=2)"/>
                                     </td>
                                     <td class="text-right">
                                         <span t-esc="formatLang(l.discount, digits=0)"/>%
                                     </td>
                                     <td class="text-right">
-                                        $<span t-esc="formatLang(l.price_unit-l.price_unit*l.discount/100, digits=2)"/>
+                                        Ȼ<span t-esc="formatLang(l.price_unit-l.price_unit*l.discount/100, digits=2)"/>
                                     </td>
                                     <td class="text-right">
-                                        $<span t-esc="formatLang(l.price_subtotal, digits=2)"/>
+                                        Ȼ<span t-esc="formatLang(l.price_subtotal, digits=2)"/>
                                     </td>
                                 </tr>
                             </tbody>
@@ -116,10 +116,6 @@
                               <td style="font-size:9.0px;WIDTH:70%" class="text-justify">
                                 <span t-if="o.amount_total &gt;= 0">
                                  Esta factura constituye título ejecutivo, de acuerdo con las disposiciones del artículo 460 del código de comercio vigente.
-                                 No se aceptan devoluciones de mercadería en descuento. Cambios de mercadería se aceptan únicamente dentro de
-                                 los siguientes 7 días hábiles, en sus empaques originales con todas las etiquetas puestas y en buen estado. No se
-                                 hacen devoluciones de dinero sino crédito de tienda únicamente. Al cancelar esta factura, el/la cliente(a) acepta 
-                                 expresamente las condiciones de la venta anteriormente descritas
                                  </span> 
                                 <span t-if="o.amount_total &lt; 0">
                                         Esta nota de crédito tiene una validez de tres meses a partir de la fecha indicada.
@@ -130,25 +126,25 @@
                                             <tr class="border-black">
                                                 <td><strong>Subtotal</strong></td>
                                                 <td class="text-right">
-                                                    $<span t-esc="formatLang(o.amount_subtotal, digits=2)"/>
+                                                    Ȼ<span t-esc="formatLang(o.amount_subtotal, digits=2)"/>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Impuestos</td>
                                                 <td class="text-right">
-                                                    $<span t-esc="formatLang(o.amount_tax, digits=2)"/>
+                                                    Ȼ<span t-esc="formatLang(o.amount_tax, digits=2)"/>
                                                 </td>
                                             </tr>
                                             <tr class="border-black">
                                                 <td><strong>Total</strong></td>
                                                 <td class="text-right">
-                                                    $<span t-esc="formatLang(o.amount_total, digits=2)"/>
+                                                    Ȼ<span t-esc="formatLang(o.amount_total, digits=2)"/>
                                                 </td>
                                             </tr>
                                             <tr t-if="o.amount_base - o.amount_subtotal" class="border-black">
                                                 <td>(Descuento aplicado</td>
                                                 <td class="text-right">
-                                                    $<span t-esc="formatLang(o.amount_base - o.amount_subtotal, digits=2)"/>)
+                                                    Ȼ<span t-esc="formatLang(o.amount_base - o.amount_subtotal, digits=2)"/>)
                                                 </td>
                                             </tr>
                                         </table>
@@ -165,18 +161,15 @@
                <li>&amp;bull;</li>
               <li> Ced.Jur.<span t-field="o.company_id.vat"/> </li>
                <li>&amp;bull;</li>
-              <li>Adress: del Cruce Escazú, 115 metros oeste, Edificio KATE, San José, Costa Rica</li>
-            </ul>
-            <ul t-if="not o.company_id.custom_footer" class="list-inline">
                 <li t-if="o.company_id.phone">Phone: <span t-field="o.company_id.phone"/></li>
                 <li t-if="o.company_id.fax and o.company_id.phone">&amp;bull;</li>
                 <li t-if="o.company_id.fax">Fax: <span t-field="o.company_id.fax"/></li>
-
-                <li t-if="o.company_id.email">&amp;bull;</li>
+            </ul>
+            <ul class="list-inline">
+                <!--li t-if="o.company_id.email">&amp;bull;</li-->
                 <li t-if="o.company_id.email">Email: <span t-field="o.company_id.email"/></li>
-
-                <li t-if="o.company_id.website">&amp;bull;</li>
-                <li t-if="o.company_id.website"> <span t-field="o.company_id.website"/></li>
+                <!--li t-if="o.company_id.website">&amp;bull;</li>
+                <li t-if="o.company_id.website"> <span t-field="o.company_id.website"/></li-->
             </ul>
             <ul style="font-size:8.0px" class="list-inline"> Autorizado mediante resolución #11-97 de la Dirección General de Tributación Directa, publicado en el diario oficial La Gaceta #171 el 5 de septiembre de 1997
             </ul>
