@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+<!--
+        <record id="template_search_form_view_alias" model="ir.ui.view">
+            <field name="name">product.template.search.alias</field>
+            <field name="model">product.template</field>
+            <field name="mode">primary</field>
+            <field eval="5" name="priority"/>
+            <field name="inherit_id" ref="product.template_search_form_view"/>
+            <field name="arch" type="xml">
+                <field name="categ_id" position="replace">
+                    <field name="categ_id" string="Category" 
+                     filter_domain="['|', ('categ_id', 'ilike', self),('categ_id', 'child_of', self)]"/>
+                </field>
+            </field>
+        </record>
+        <record id="product_search_form_view_alias" model="ir.ui.view">
+            <field name="name">product.product.search.alias</field>
+            <field name="model">product.product</field>
+            <field name="mode">primary</field>
+            <field eval="5" name="priority"/>
+            <field name="inherit_id" ref="product.product_search_form_view"/>
+            <field name="arch" type="xml">
+                <field name="categ_id" position="replace">
+                    <field name="categ_id" string="Category" 
+                     filter_domain="['|', ('categ_id', 'ilike', self),('categ_id', 'child_of', self)]"/>
+                </field>
+            </field>
+        </record>
+-->
+    </data>
+</openerp>

@@ -4,7 +4,6 @@
 <template id="report_sessionsummary">
     <!--t t-call="report.html_container"-->
         <t t-foreach="docs" t-as="o">
-            <!--t t-call="report.internal_layout"-->
                 <div class="page">
                     <h2>Session Summary: <span t-field="o.name"/></h2>
 
@@ -79,8 +78,7 @@
                                         t-field-options='{"widget": "monetary", "display_currency": "statement.currency"}'/>
                                 </td>
                                 <td class="text-right" groups="base.group_multi_currency">
-                                    <span t-field="statement.currency"
-                                        t-field-options='{"widget": "monetary", "display_currency": "statement.currency"}'/>
+                                    <span t-field="statement.currency"/>
                                 </td>
                                 <td class="text-right"><span t-field="statement.state"/></td>
                             </tr>
@@ -115,6 +113,30 @@
                             </tbody>
                         </table>
                     </t>
+                    <h4>Detalles por Categoría:</h4>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Qty</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="get_sales_by_category(o.id)" t-as="categ_line">
+                                <td><span t-esc="categ_line['name']"/></td>
+                                <td class="text-right">
+                                    <span t-field="categ_line['qty']"
+                                        t-field-options='{"widget": "monetary", "display_currency": "statement.currency"}'/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="categ_line['total']"
+                                        t-field-options='{"widget": "monetary", "display_currency": "statement.currency"}'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
                     <t t-if="o.opening_details_ids">
                         <table class="table table-condensed">
                             <tr>
@@ -138,7 +160,7 @@
                                     </table>
                                 </td>
                                 <td>
-                                    <h4 t-if="o.details_ids">Opening Details:</h4>
+                                    <h4 t-if="o.details_ids">Closing Details:</h4>
                                     <table class="table table-condensed">
                                         <thead>
                                             <tr>

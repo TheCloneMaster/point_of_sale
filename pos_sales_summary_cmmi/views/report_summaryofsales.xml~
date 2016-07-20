@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_summaryofsales">
+    <t t-call="report.html_container">
+        <t t-call="report.internal_layout">
+            <div class="page">
+                <h2>CIERRE DE VENTAS</h2>
+
+                <div class="row mb32">
+                    <div class="col-xs-3">
+                        <strong>Fecha Inicio</strong>:<br/>
+                        <span t-esc="formatLang(data['form']['date_start'],date=True)"/> 
+                    </div>
+                    <div class="col-xs-3">
+                        <strong>Fecha Fin</strong>:<br/>
+                        <span t-esc="formatLang(data['form']['date_end'],date=True)"/> 
+                    </div>
+                </div>
+
+                <h3 t-if="data['form']['show_details']">Ventas POS</h3>
+                <table t-if="data['form']['show_details']" class="table table-condensed">
+                    <thead>
+                        <th><strong>Fecha</strong></th>
+                        <th><strong>No.Factura</strong></th>
+                        <th class="text-right"><strong>Subtotal</strong></th>
+                        <th class="text-right"><strong>I.V.</strong></th>
+                        <th class="text-right"><strong>Total</strong></th>
+                        <th><strong>Estado</strong></th>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="pos_sales_details(data['form'])" t-as="line_ids">
+                            <td>
+                                <span t-esc="formatLang(line_ids['date_order'], date_time=True)"/>
+                            </td>
+                            <td>
+                                <span t-esc="line_ids['pos_name']"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(line_ids['subtotal'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(line_ids['tax'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(line_ids['total'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td>
+                                <span t-esc="line_ids['state']"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>TOTAL VENTAS POS</strong>
+                            </td>
+                            <td>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="formatLang(getsalessubtotal2(), dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="formatLang(gettaxamount2(), currency_obj = res_company.currency_id)"/>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="formatLang(getsalestotal2(), dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 t-if="data['form']['show_details']">Pagos POS</h3>
+                <table class="table table-condensed">
+                    <tr t-foreach="getpayments(data['form'])" t-as="payment">
+                        <td><span t-esc="payment['fecha']"/></td>
+                        <td><span t-esc="payment['name']"/></td>
+                        <td class="text-right">
+                            <span t-if="payment['sum']" >
+                                <strong  t-esc="formatLang(payment['sum'], dp='Account', currency_obj=res_company.currency_id)"/>
+                            </span>
+                        </td>
+                        <td class="text-right">
+                            <span t-if="payment['sum2']" >
+                                <strong  t-esc="formatLang(payment['sum2'], dp='Account', currency_obj=res_company.currency_id)"/>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+
+                <h3 t-if="data['form']['show_details']">Ventas Crédito</h3>
+                <table t-if="data['form']['show_details']" class="table table-condensed">
+                    <thead>
+                        <th><strong>Fecha</strong></th>
+                        <th><strong>No.Factura</strong></th>
+                        <th class="text-right"><strong>Subtotal</strong></th>
+                        <th class="text-right"><strong>I.V.</strong></th>
+                        <th class="text-right"><strong>Total</strong></th>
+                        <th class="text-right"><strong>Pendiente</strong></th>
+                        <th><strong>Estado</strong></th>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="credit_sales_details(data['form'])" t-as="line_ids">
+                            <td>
+                                <span t-esc="formatLang(line_ids['date_order'], date=True)"/>
+                            </td>
+                            <td>
+                                <span t-esc="line_ids['pos_name']"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(line_ids['subtotal'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(line_ids['tax'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(line_ids['total'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(line_ids['residual'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td>
+                                <span t-esc="line_ids['state']"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>TOTAL VENTAS CREDITO</strong>
+                            </td>
+                            <td>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="formatLang(getcreditsalessubtotal2(), dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="formatLang(getcredittaxamount2(), currency_obj = res_company.currency_id)"/>
+                            </td>
+                            <td class="text-right">
+                                <strong t-esc="formatLang(getcreditsalestotal2(), dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <h3 t-if="data['form']['show_details']">Pagos Crédito</h3>
+                <table t-if="data['form']['show_details']" class="table table-condensed">
+                    <thead>
+                        <th><strong>Fecha</strong></th>
+                        <th><strong>No.Voucher</strong></th>
+                        <th><strong>Diario</strong></th>
+                        <th class="text-right"><strong>Monto</strong></th>
+                        <th class="text-right"><strong>Débitos</strong></th>
+                        <th class="text-right"><strong>Créditos</strong></th>
+                        <th class="text-right"><strong>Total</strong></th>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="credit_payment_details(data['form'])" t-as="line_ids">
+                            <td>
+                                <span t-esc="formatLang(line_ids['date'], date=True)"/>
+                            </td>
+                            <td>
+                                <span t-esc="line_ids['name']"/>
+                            </td>
+                            <td>
+                                <span t-esc="line_ids['journal']"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(line_ids['amount'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(line_ids['debits'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(line_ids['credits'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(line_ids['total'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </t>
+    </t>
+</template>
+</data>
+</openerp>

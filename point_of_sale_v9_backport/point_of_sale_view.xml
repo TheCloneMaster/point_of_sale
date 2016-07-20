@@ -835,13 +835,15 @@
                     <sheet>
                         <div class="oe_right oe_button_box">
                             <button class="oe_stat_button" name="%(action_pos_box_in)d"
-                                groups="point_of_sale.group_pos_manager"
-                                type="action" states="pre_closed" icon="fa-level-down">
+                                groups="point_of_sale.group_pos_manager" 
+                                attrs="{'invisible' : ['|',('state', '=', 'opening_control'),('state', '=', 'closed')]}"
+                                type="action" icon="fa-level-down">
                                 <div>Put<br/>Money In</div>
                             </button>
                             <button class="oe_stat_button" name="%(action_pos_box_out)d"
                                 groups="point_of_sale.group_pos_manager"
-                                type="action" states="pre_closed" icon="fa-level-up">
+                                attrs="{'invisible' : ['|',('state', '=', 'opening_control'),('state', '=', 'closed')]}"
+                                type="action" icon="fa-level-up">
                                 <div>Take<br/>Money Out</div>
                             </button>
                         </div>

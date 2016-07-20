@@ -1182,19 +1182,24 @@
                     <col width='70%' />
                     <col width='30%' />
                 </colgroup>
-                <tr t-foreach="orderlines" t-as="orderline">
-                    <td>
-                        <t t-esc="orderline.get_quantity_str_with_unit()"/>x <t t-esc="orderline.get_product().display_name"/>
-                         <t t-if="orderline.get_discount() > 0">
-                            <div class="pos-disc-font">
-                                With a <t t-esc="orderline.get_discount()"/>% discount
-                            </div>
-                        </t>
-                    </td>
-                    <td class="pos-right-align">
-                        <t t-esc="widget.format_currency(orderline.get_display_price())"/>
-                    </td>
-                </tr>
+                <t t-foreach="orderlines" t-as="orderline">
+                    <tr>
+                        <td>
+                            <t t-esc="orderline.get_quantity_str_with_unit()"/>x <t t-esc="orderline.get_product().display_name"/>
+                             <t t-if="orderline.get_discount() > 0">
+                                <div class="pos-disc-font">
+                                    With a <t t-esc="orderline.get_discount()"/>% discount
+                                </div>
+                            </t>
+                        </td>
+                        <td class="pos-right-align">
+                            <t t-esc="widget.format_currency(orderline.get_display_price())"/>
+                        </td>
+                    </tr>
+                    <tr t-if="orderline.get_note()">
+                        <td> <t t-esc="orderline.get_note()" /> </td>
+                    </tr>
+                </t>
             </table>
             <br />
             <table>

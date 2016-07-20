@@ -2,158 +2,157 @@
 <openerp>
 <data>
 <template id="report_pos_invoice_qweb_document">
-<t t-name="purple_pos_invoice_qweb.report_pos_invoice_qweb_document">
-            <div class="header">
-                <div class="row mt32 mb32">
-                    <div class="col-xs-6">
-                            <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="max-height: 100px;"/>
-                    </div>
-                    <div class="col-xs-1"/>
-                    <div class="col-xs-5">
-                        <span style="font-size:5.0px"><br/></span>
-                        <span t-field="o.company_id.name"/><br/>
-                        Ced.Jur.<span t-field="o.company_id.vat"/><br/>
-                        <span t-field="o.company_id.street"/><span t-field="o.company_id.street2"/><br/>
-                    <h3>
-                        <span t-if="o.amount_total &gt;= 0">Factura No. </span> 
-                        <span t-if="o.amount_total &lt; 0">Nota de Crédito No. </span> 
-                        <span t-field="o.name"/> 
-                    </h3>
-                    </div>
-                </div>
+    <div class="header">
+        <div class="row mt32 mb32">
+            <div class="col-xs-6">
+                    <img t-if="o.company_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_id.logo" style="max-height: 100px;"/>
             </div>
-            <div class="page" style="border:1px solid black;"> 
-               <table style="WIDTH:100%">
+            <div class="col-xs-1"/>
+            <div class="col-xs-5">
+                <span style="font-size:5.0px"><br/></span>
+                <span t-field="o.company_id.name"/><br/>
+                Ced.Jur.<span t-field="o.company_id.vat"/><br/>
+                <span t-field="o.company_id.street"/><span t-field="o.company_id.street2"/><br/>
+            <h3>
+                <span t-if="o.amount_total &gt;= 0">Factura No. </span> 
+                <span t-if="o.amount_total &lt; 0">Nota de Crédito No. </span> 
+                <span t-field="o.name"/> 
+            </h3>
+            </div>
+        </div>
+    </div>
+    <div class="page" style="border:1px solid black;"> 
+       <table style="WIDTH:100%">
+          <tr>
+            <td>
+                <table style="WIDTH:100%" class="table-condensed">
+                    <tr>
+                        <td style="WIDTH:10%"/>
+                        <td style="WIDTH:12.5%"><strong>Señor(a):</strong></td>
+                        <td style="WIDTH:37.5%">
+                            <span t-field="o.partner_id.name"/>
+                        </td>
+                        <td style="WIDTH:15%"><strong>Fecha</strong></td>
+                        <td style="WIDTH:30%">
+                            <span t-esc="o.date_order[0:10]"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td><strong>Dirección</strong></td>
+                        <td>
+                            <span t-field="o.partner_id.street"/>
+                        </td>
+                        <td><strong>Teléfono:</strong></td>
+                        <td>
+                            <span t-field="o.partner_id.phone"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td><strong>Email:</strong></td>
+                        <td>
+                            <span t-field="o.partner_id.email"/>
+                        </td>
+                        <td><strong>Orden de Compra:</strong></td>
+                        <td>
+                            <span t-field="o.pos_reference"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td/>
+                        <td><strong>Observaciones:</strong></td>
+                        <td>
+                            <span t-field="o.note"/>
+                        </td>
+                        <td><strong>Rep:</strong></td>
+                        <td>
+                            <span t-field="o.user_id.name"/>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+                <br/>
+
+                <table class="table-condensed" style="WIDTH:100%">
+                    <thead>
+                        <tr class="border-black">
+                            <th style="WIDTH:45%">Item</th>
+                            <th style="WIDTH:7%" class="text-right">Cant.</th>
+                            <th style="WIDTH:13%" class="text-right">Precio Unit.</th>
+                            <th style="WIDTH:7%" class="text-right">%Desc.</th>
+                            <th style="WIDTH:13%" class="text-right">Precio</th>
+                            <th style="WIDTH:15%" class="text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="invoice_tbody">
+                        <tr t-foreach="o.lines" t-as="l">
+                            <td><span t-field="l.product_id.name"/><br/><span t-field="l.note"/></td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(l.qty, digits=0)"/>
+                            </td>
+                            <td class="text-right">
+                                Ȼ<span t-esc="formatLang(l.price_unit, digits=2)"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="formatLang(l.discount, digits=0)"/>%
+                            </td>
+                            <td class="text-right">
+                                Ȼ<span t-esc="formatLang(l.price_unit-l.price_unit*l.discount/100, digits=2)"/>
+                            </td>
+                            <td class="text-right">
+                                Ȼ<span t-esc="formatLang(l.price_subtotal, digits=2)"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+          </tr>
+
+          <tr> <td>
+              <table style="WIDTH:100%" class="table-condensed">
                   <tr>
-                    <td>
-                        <table style="WIDTH:100%" class="table-condensed">
-                            <tr>
-                                <td style="WIDTH:10%"></td>
-                                <td style="WIDTH:12.5%"><strong>Señor(a):</strong></td>
-                                <td style="WIDTH:37.5%">
-                                    <span t-field="o.partner_id.name"/>
-                                </td>
-                                <td style="WIDTH:15%"><strong>Fecha</strong></td>
-                                <td style="WIDTH:30%">
-                                    <span t-esc="o.date_order[0:10]"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><strong>Dirección</strong></td>
-                                <td>
-                                    <span t-field="o.partner_id.street"/>
-                                </td>
-                                <td><strong>Teléfono:</strong></td>
-                                <td>
-                                    <span t-field="o.partner_id.phone"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><strong>Email:</strong></td>
-                                <td>
-                                    <span t-field="o.partner_id.email"/>
-                                </td>
-                                <td><strong>Orden de Compra:</strong></td>
-                                <td>
-                                    <span t-field="o.pos_reference"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><strong>Observaciones:</strong></td>
-                                <td>
-                                    <span t-field="o.note"/>
-                                </td>
-                                <td><strong>Rep:</strong></td>
-                                <td>
-                                    <span t-field="o.user_id.name"/>
-                                </td>
-                            </tr>
-                        </table>
-                        <br/>
-                        <br/>
-    
-                        <table class="table-condensed" style="WIDTH:100%">
-                            <thead>
-                                <tr class="border-black">
-                                    <th style="WIDTH:45%">Item</th>
-                                    <th style="WIDTH:7%" class="text-right">Cant.</th>
-                                    <th style="WIDTH:13%" class="text-right">Precio Unit.</th>
-                                    <th style="WIDTH:7%" class="text-right">%Desc.</th>
-                                    <th style="WIDTH:13%" class="text-right">Precio</th>
-                                    <th style="WIDTH:15%" class="text-right">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody class="invoice_tbody">
-                                <tr t-foreach="o.lines" t-as="l">
-                                    <td><span t-field="l.product_id.name"/><span t-field="l.note"/></td>
-                                    <td class="text-right">
-                                        <span t-esc="formatLang(l.qty, digits=0)"/>
-                                    </td>
-                                    <td class="text-right">
-                                        Ȼ<span t-esc="formatLang(l.price_unit, digits=2)"/>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-esc="formatLang(l.discount, digits=0)"/>%
-                                    </td>
-                                    <td class="text-right">
-                                        Ȼ<span t-esc="formatLang(l.price_unit-l.price_unit*l.discount/100, digits=2)"/>
-                                    </td>
-                                    <td class="text-right">
-                                        Ȼ<span t-esc="formatLang(l.price_subtotal, digits=2)"/>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
+                      <td style="font-size:9.0px;WIDTH:70%" class="text-justify">
+                        <span t-if="o.amount_total &gt;= 0">
+                         Esta factura constituye título ejecutivo, de acuerdo con las disposiciones del artículo 460 del código de comercio vigente.
+                         </span> 
+                        <span t-if="o.amount_total &lt; 0">
+                                Esta nota de crédito tiene una validez de tres meses a partir de la fecha indicada.
+                         </span> 
+                      </td>
+                      <td style="WIDTH:30%">
+                                <table class="table table-condensed">
+                                    <tr class="border-black">
+                                        <td><strong>Subtotal</strong></td>
+                                        <td class="text-right">
+                                            Ȼ<span t-esc="formatLang(o.amount_subtotal, digits=2)"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Impuestos</td>
+                                        <td class="text-right">
+                                            Ȼ<span t-esc="formatLang(o.amount_tax, digits=2)"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-black">
+                                        <td><strong>Total</strong></td>
+                                        <td class="text-right">
+                                            Ȼ<span t-esc="formatLang(o.amount_total, digits=2)"/>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="o.amount_base - o.amount_subtotal" class="border-black">
+                                        <td>(Descuento aplicado</td>
+                                        <td class="text-right">
+                                            Ȼ<span t-esc="formatLang(o.amount_base - o.amount_subtotal, digits=2)"/>)
+                                        </td>
+                                    </tr>
+                                </table>
+                      </td>
                   </tr>
-    
-                  <tr> <td>
-                      <table style="WIDTH:100%" class="table-condensed">
-                          <tr>
-                              <td style="font-size:9.0px;WIDTH:70%" class="text-justify">
-                                <span t-if="o.amount_total &gt;= 0">
-                                 Esta factura constituye título ejecutivo, de acuerdo con las disposiciones del artículo 460 del código de comercio vigente.
-                                 </span> 
-                                <span t-if="o.amount_total &lt; 0">
-                                        Esta nota de crédito tiene una validez de tres meses a partir de la fecha indicada.
-                                 </span> 
-                              </td>
-                              <td style="WIDTH:30%">
-                                        <table class="table table-condensed">
-                                            <tr class="border-black">
-                                                <td><strong>Subtotal</strong></td>
-                                                <td class="text-right">
-                                                    Ȼ<span t-esc="formatLang(o.amount_subtotal, digits=2)"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Impuestos</td>
-                                                <td class="text-right">
-                                                    Ȼ<span t-esc="formatLang(o.amount_tax, digits=2)"/>
-                                                </td>
-                                            </tr>
-                                            <tr class="border-black">
-                                                <td><strong>Total</strong></td>
-                                                <td class="text-right">
-                                                    Ȼ<span t-esc="formatLang(o.amount_total, digits=2)"/>
-                                                </td>
-                                            </tr>
-                                            <tr t-if="o.amount_base - o.amount_subtotal" class="border-black">
-                                                <td>(Descuento aplicado</td>
-                                                <td class="text-right">
-                                                    Ȼ<span t-esc="formatLang(o.amount_base - o.amount_subtotal, digits=2)"/>)
-                                                </td>
-                                            </tr>
-                                        </table>
-                              </td>
-                          </tr>
-                      </table>
-                  </td> </tr>
-               </table>
-            </div>
+              </table>
+          </td> </tr>
+       </table>
+    </div>
     <div class="footer">
         <div class="text-center" style="border-top: 1px solid black;">
             <ul class="list-inline">
@@ -175,7 +174,7 @@
             </ul>
         </div>
     </div>      
-</t></template>
+</template>
 
 <template id="report_pos_invoice_qweb">
     <t t-call="report.html_container">
