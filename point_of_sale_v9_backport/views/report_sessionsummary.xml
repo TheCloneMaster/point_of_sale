@@ -126,12 +126,10 @@
                             <tr t-foreach="get_sales_by_category(o.id)" t-as="categ_line">
                                 <td><span t-esc="categ_line['name']"/></td>
                                 <td class="text-right">
-                                    <span t-field="categ_line['qty']"
-                                        t-field-options='{"widget": "monetary", "display_currency": "statement.currency"}'/>
+                                    <span t-esc="categ_line['qty']"/>
                                 </td>
                                 <td class="text-right">
-                                    <span t-field="categ_line['total']"
-                                        t-field-options='{"widget": "monetary", "display_currency": "statement.currency"}'/>
+                                    <span t-esc="categ_line['total']"/>
                                 </td>
                             </tr>
                         </tbody>
