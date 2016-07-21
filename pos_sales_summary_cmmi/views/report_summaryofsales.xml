@@ -22,6 +22,7 @@
                     <thead>
                         <th><strong>Fecha</strong></th>
                         <th><strong>No.Factura</strong></th>
+                        <th><strong>Paciente</strong></th>
                         <th class="text-right"><strong>Subtotal</strong></th>
                         <th class="text-right"><strong>I.V.</strong></th>
                         <th class="text-right"><strong>Total</strong></th>
@@ -34,9 +35,12 @@
                             </td>
                             <td>
                                 <span t-esc="line_ids['pos_name']"/>
-                                <t t-foreach="line_ids['lines']" t-as="order_line">
+                                <!--t t-foreach="line_ids['lines']" t-as="order_line">
                                     <br/><span t-esc="order_line.product_id.name"/><t t-if="order_line.note"> - <span t-esc="order_line.note"/> </t>
-                                </t>
+                                </t-->
+                            </td>
+                            <td>
+                                <span t-esc="line_ids['customer_name']"/>
                             </td>
                             <td class="text-right">
                                 <span t-esc="formatLang(line_ids['subtotal'], dp='Sale Price', currency_obj=res_company.currency_id)"/>

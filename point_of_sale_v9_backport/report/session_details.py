@@ -49,6 +49,7 @@ class session_details(report_sxw.rml_parse):
             data.append({
                 'pos_name': pos.name + (pos.invoice_id and "-"+pos.invoice_id.number or ""),
                 'date_order': pos.date_order,
+                'customer_name': pos.partner_id.name,
                 'subtotal': subtotal,
                 'tax': tax,
                 'total': total,
