@@ -27,12 +27,12 @@ from openerp.report import report_sxw
 class session_details(report_sxw.rml_parse):
     def _get_sales_by_category(self, session_id):
         self.cr.execute(" select c.name as name, sum(pol.qty) qty, sum(pol.price_subtotal) total " \
-                        " from pos_order po, pos_order_line pol, product_product p, product_template t, product_category c " \
+                        " from pos_order po, pos_order_line pol, product_product p, product_template t, pos_category c " \
                         " where po.session_id = %s and " \
                         "       po.id = pol.order_id and " \
                         "       pol.product_id = p.id and " \
                         "       p.product_tmpl_id = t.id and " \
-                        "       t.categ_id = c.id " \
+                        "       t.pos_categ_id = c.id " \
                         " group by c.name", (session_id,))
         return self.cr.dictfetchall()
 
