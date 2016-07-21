@@ -87,7 +87,7 @@
                     <!--t t-if="o.config_id.iface_product_summary">
                     </t-->
                     <t t-foreach="o.statement_ids" t-as="statement">
-                        <h4 t-if="statement.line_ids">Statement Details: <span t-esc="statement.journal_id.name"/></h4>
+                        <h4 t-if="statement.line_ids">Detalles de pago: <span t-esc="statement.journal_id.name"/></h4>
 
                         <table class="table table-condensed" t-if="statement.line_ids">
                             <thead>
@@ -134,7 +134,62 @@
                             </tr>
                         </tbody>
                     </table>
-                    
+
+                    <h4>Detalle de Facturas</h4>
+                    <table class="table table-condensed">
+                        <thead>
+                            <th><strong>Fecha</strong></th>
+                            <th><strong>No.Factura</strong></th>
+                            <th class="text-right"><strong>Subtotal</strong></th>
+                            <th class="text-right"><strong>I.V.</strong></th>
+                            <th class="text-right"><strong>Total</strong></th>
+                            <th><strong>Estado</strong></th>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="pos_sales_details(o)" t-as="line_ids">
+                                <td>
+                                    <span t-esc="formatLang(line_ids['date_order'], date_time=True)"/>
+                                </td>
+                                <td>
+                                    <span t-esc="line_ids['pos_name']"/>
+                                    <t t-foreach="line_ids['lines']" t-as="order_line">
+                                        <br/><span t-esc="order_line.product_id.name"/><t t-if="order_line.note"> - <span t-esc="order_line.note"/> </t>
+                                    </t>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="formatLang(line_ids['subtotal'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="formatLang(line_ids['tax'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="formatLang(line_ids['total'], dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                                </td>
+                                <td>
+                                    <span t-esc="line_ids['state']"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>TOTAL VENTAS POS</strong>
+                                </td>
+                                <td>
+                                </td>
+                                <td class="text-right">
+                                    <strong t-esc="formatLang(getsalessubtotal2(), dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                                </td>
+                                <td class="text-right">
+                                    <strong t-esc="formatLang(gettaxamount2(), currency_obj = res_company.currency_id)"/>
+                                </td>
+                                <td class="text-right">
+                                    <strong t-esc="formatLang(getsalestotal2(), dp='Sale Price', currency_obj=res_company.currency_id)"/>
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
                     <t t-if="o.opening_details_ids">
                         <table class="table table-condensed">
                             <tr>

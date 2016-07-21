@@ -38,7 +38,6 @@ class pos_summary(report_sxw.rml_parse):
         pos_obj = self.pool.get('pos.order')
         user_obj = self.pool.get('res.users')
         data = []
-        result = {}
         #user_ids = form['user_ids'] or self._get_all_users()
         location_ids = form['location_ids'] or self._get_all_locations()
 
@@ -56,7 +55,7 @@ class pos_summary(report_sxw.rml_parse):
             else:
                 subtotal = tax = total = 0
 
-            result = {
+            data.append( {
                 'pos_name': pos.name + (pos.invoice_id and "-"+pos.invoice_id.number or ""),
                 'date_order': pos.date_order,
                 'subtotal': subtotal,
@@ -64,8 +63,7 @@ class pos_summary(report_sxw.rml_parse):
                 'total': total,
                 'state': pos.state,
                 'lines': pos.lines,
-            }
-            data.append(result)
+            })
             if pos.state in ['done','paid']:
                 #self.base += (pol.price_unit * pol.qty)
                 self.subtotal += pos.amount_subtotal

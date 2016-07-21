@@ -36,10 +36,54 @@ class session_details(report_sxw.rml_parse):
                         " group by c.name", (session_id,))
         return self.cr.dictfetchall()
 
+    def _pos_sales_details(self, session):
+        data = []
+        for pos in session.order_ids:
+            if pos.state in ['paid', 'done']:
+                subtotal = pos.amount_subtotal
+                tax = pos.amount_tax
+                total = pos.amount_total
+            else:
+                subtotal = tax = total = 0
+
+            data.append({
+                'pos_name': pos.name + (pos.invoice_id and "-"+pos.invoice_id.number or ""),
+                'date_order': pos.date_order,
+                'subtotal': subtotal,
+                'tax': tax,
+                'total': total,
+                'state': pos.state,
+                'lines': pos.lines,
+            })
+            if pos.state in ['done','paid']:
+                #self.base += (pol.price_unit * pol.qty)
+                self.subtotal += pos.amount_subtotal
+                self.total += pos.amount_total
+                #self.qty += pol.qty
+        if data:
+            return data
+        else:
+            return {}
+
+    def _get_tax_amount2(self):
+        return self.total - self.subtotal
+
+    def _get_sales_total_2(self):
+        return self.total
+
+    def _get_sales_subtotal_2(self):
+        return self.subtotal
+    
     def __init__(self, cr, uid, name, context):
         super(session_details, self).__init__(cr, uid, name, context=context)
+        self.subtotal = 0.0
+        self.total = 0.0
         self.localcontext.update({
             'get_sales_by_category': self._get_sales_by_category,
+            'pos_sales_details':self._pos_sales_details,
+            'getsalessubtotal2': self._get_sales_subtotal_2,
+            'getsalestotal2': self._get_sales_total_2,
+            'gettaxamount2': self._get_tax_amount2,
         })
 
 
