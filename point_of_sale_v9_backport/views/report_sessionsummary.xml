@@ -194,7 +194,7 @@
                         </tbody>
                     </table>
 
-                    <t t-if="o.opening_details_ids">
+                    <!--t t-if="o.opening_details_ids">
                         <table class="table table-condensed">
                             <tr>
                                 <td>
@@ -237,7 +237,7 @@
                                 </td>
                             </tr>
                         </table>
-                    </t>
+                    </t-->
                 </div>
             </t>
         <!--/t>
